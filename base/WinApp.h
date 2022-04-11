@@ -45,7 +45,7 @@ class WinApp {
 	/// <param name="clientHeight">ウィンドウのクライアント領域の初期高さ</param>
 	/// </summary>
 	void CreateGameWindow(
-	  const char* title = "LE2B_21_フジタ_ケンタロウ_AL3", UINT windowStyle = WS_OVERLAPPEDWINDOW,
+	  const char* title = "DirectXGame", UINT windowStyle = WS_OVERLAPPEDWINDOW,
 	  int32_t clientWidth = kWindowWidth, int32_t clientHeight = kWindowHeight);
 
 	/// <summary>
