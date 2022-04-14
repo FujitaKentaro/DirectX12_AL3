@@ -22,11 +22,11 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 
 	// X,Y,Z 方向のスケーリングを設定
-	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransform_.scale_ = {5.0f, 5.0f, 5.0f};
 	// X,Y,Z 軸回りの回転角を設定
-	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransform_.rotation_ = {XM_PI / 4.0f, XM_PI / 4.0f, 0.0f};
 	// X,Y,Z 軸回りの平行移動を設定
-	worldTransform_.translation_ = {1.0f, 1.0f, 1.0f};
+	worldTransform_.translation_ = {10.0f, 10.0f, 10.0f};
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -37,35 +37,32 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("mario.png");
 
 	//スプライトの生成
-	sprite_ = Sprite::Create(textureHandle_, {100, 50});
+	//sprite_ = Sprite::Create(textureHandle_, {100, 50});
 
 	//サウンドデーターの読み込み
 	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
 	//音声再生
-	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
+	//voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
+
 }
 
 void GameScene::Update() {
-	//スプライトの今の座標を取得
-	XMFLOAT2 position = sprite_->GetPosition();
-	//座標を｛　2，0　｝移動
-	position.x += 2.0f;
-	position.y += 1.0f;
-	//移動した座標をスプライトの反映
-	sprite_->SetPosition(position);
-
-	//スペースキーを押した瞬間
-	if (input_->TriggerKey(DIK_SPACE)) {
-		//音声停止
-		audio_->StopWave(voiceHandle_);
-	}
-
-	//変数の値をインクリメント
-	value_++;
-	//値を含んだ文字列
-	std::string strDebug = std::string("Value:") + std::to_string(value_);
+	
+	
 	//デバッグテキストの表示
-	debugText_->Print(strDebug, 50, 50, 1.0f);
+	debugText_->SetPos(40, 50);
+	debugText_->Printf(
+	  "toranslation:(%f,%f,%f)\n", worldTransform_.scale_.x, worldTransform_.scale_.y,
+	  worldTransform_.scale_.z);
+	debugText_->SetPos(40, 70);
+	debugText_->Printf(
+	  "lotation:(%f,%f,%f)\n", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
+	  worldTransform_.rotation_.z);
+	debugText_->SetPos(40, 90);
+	debugText_->Printf(
+	  "scale:(%f,%f,%f)\n", worldTransform_.translation_.x, worldTransform_.translation_.y,
+	  worldTransform_.translation_.z);
+
 }
 
 void GameScene::Draw() {
@@ -107,7 +104,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	sprite_->Draw();
+	
+	//sprite_->Draw();
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
