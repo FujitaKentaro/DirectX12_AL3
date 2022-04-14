@@ -48,8 +48,20 @@ class GameScene {
 	Audio* audio_ = nullptr;
 	DebugText* debugText_ = nullptr;
 
+	//値を表示したい変数
+	uint32_t value_ = 0;
+
+	//スプライト
+	Sprite* sprite_ = nullptr;
+
 	//3Dモデル
 	Model* model_ = nullptr;
+
+	//音声再生ハンドル
+	uint32_t voiceHandle_ = 0;
+
+	//サウンドデーターハンドル
+	uint32_t soundDataHandle_ = 0;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
