@@ -7,7 +7,12 @@ using namespace DirectX;
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() { delete model_; }
+
+GameScene::~GameScene() {
+	delete model_;
+	delete sprite_;
+}
+
 
 void GameScene::Initialize() {
 
@@ -18,6 +23,7 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
+
 
 	//乱数シード生成器
 	std::random_device seed_gen;
@@ -48,12 +54,22 @@ void GameScene::Initialize() {
 	//カメラ上方向ベクトルを設定（右上45度指定）
 	viewProjection_.up = {cosf(XM_PI / 4.0f), sinf(XM_PI / 4.0f), 0.0f};
 
+
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.png");
+  //スプライトの生成
+	//sprite_ = Sprite::Create(textureHandle_, {100, 50});
+
+	//サウンドデーターの読み込み
+	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
+	//音声再生
+	//voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
+
 }
+
 
 void GameScene::Update() {
 
@@ -140,6 +156,22 @@ void GameScene::Update() {
 			viewProjection_.up.z);
 
 	}
+
+	
+	//デバッグテキストの表示
+	debugText_->SetPos(40, 50);
+	debugText_->Printf(
+	  "toranslation:(%f,%f,%f)\n", worldTransform_.scale_.x, worldTransform_.scale_.y,
+	  worldTransform_.scale_.z);
+	debugText_->SetPos(40, 70);
+	debugText_->Printf(
+	  "lotation:(%f,%f,%f)\n", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
+	  worldTransform_.rotation_.z);
+	debugText_->SetPos(40, 90);
+	debugText_->Printf(
+	  "scale:(%f,%f,%f)\n", worldTransform_.translation_.x, worldTransform_.translation_.y,
+	  worldTransform_.translation_.z);
+
 }
 
 void GameScene::Draw() {
@@ -184,6 +216,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	
+	//sprite_->Draw();
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
