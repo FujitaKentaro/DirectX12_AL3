@@ -47,6 +47,8 @@ class GameScene {
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 	DebugText* debugText_ = nullptr;
+	//カメラ上方向の角度
+	float viewAngle = 0.0f;
 
 	//値を表示したい変数
 	uint32_t value_ = 0;
@@ -67,7 +69,7 @@ class GameScene {
 	uint32_t textureHandle_ = 0;
 
 	//ワールドトランスフォーム
-	WorldTransform worldTransform_;
+	WorldTransform worldTransform_[100];
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
