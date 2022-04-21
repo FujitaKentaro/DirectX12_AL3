@@ -244,6 +244,7 @@ void GameScene::Update() {
 				worldTransform_[PartId::Chest].rotation_.y -= kChestRotSpeed;
 			} else if (input_->PushKey(DIK_I)) {
 				worldTransform_[PartId::Chest].rotation_.y += kChestRotSpeed;
+			
 			}
 		}
 		
