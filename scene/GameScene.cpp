@@ -28,40 +28,76 @@ void GameScene::Initialize() {
 	//乱数範囲　（座標系）
 	std::uniform_real_distribution<float> posDist(-10.0f, 10.0f);
 
-	//親（0番）
-	worldTransform_[0].Initialize();
-	//子（１番）
-	worldTransform_[1].translation_ = {0, 4.5f, 0};
-	worldTransform_[1].parent_ = &worldTransform_[0];
-	worldTransform_[1].Initialize();
+	//キャラクターの大元
+	worldTransform_[PartId::Root].Initialize();
+	//脊椎
+	worldTransform_[PartId::Spine].translation_ = {0, -4.5f, 0};
+	worldTransform_[PartId ::Spine].parent_ = &worldTransform_[PartId::Root];
+	worldTransform_[PartId::Spine].Initialize();
 
-	//カメラ視点座標を設定
-	viewProjection_.eye = {0, 0, -50};
-	//カメラ注視点座標を設定
-	viewProjection_.target = {0, 0, 0};
-	//カメラ上方向ベクトルを設定（右上45度指定）
-	viewProjection_.up = {cosf(XM_PI / 4.0f), sinf(XM_PI / 4.0f), 0.0f};
+	////上半身
+	//mune
+	worldTransform_[PartId::Chest].translation_ = {0, 4.5f, 0};
+	worldTransform_[PartId ::Chest].parent_ = &worldTransform_[PartId::Spine];
+	worldTransform_[PartId::Chest].Initialize();
+	//atama
+	worldTransform_[PartId::Head].translation_ = {0, 4.5f, 0};
+	worldTransform_[PartId ::Head].parent_ = &worldTransform_[PartId::Chest];
+	worldTransform_[PartId::Head].Initialize();
+	//hidariude
+	worldTransform_[PartId::ArmL].translation_ = {-4, 0, 0};
+	worldTransform_[PartId ::ArmL].parent_ = &worldTransform_[PartId::Chest];
+	worldTransform_[PartId::ArmL].Initialize();
+	//migiude
+	worldTransform_[PartId::ArmR].translation_ = {4, 0, 0};
+	worldTransform_[PartId ::ArmR].parent_ = &worldTransform_[PartId::Chest];
+	worldTransform_[PartId::ArmR].Initialize();
+
+	////下半身
+	//siri
+	worldTransform_[PartId::Hip].translation_ = {0, 0, 0};
+	worldTransform_[PartId ::Hip].parent_ = &worldTransform_[PartId::Spine];
+	worldTransform_[PartId::Hip].Initialize();
+	//hidariasi
+	worldTransform_[PartId::LegL].translation_ = {-4, -4.5f, 0};
+	worldTransform_[PartId ::LegL].parent_ = &worldTransform_[PartId::Hip];
+	worldTransform_[PartId::LegL].Initialize();
+	//migiasi
+	worldTransform_[PartId::LegR].translation_ = {4, -4.5f, 0};
+	worldTransform_[PartId ::LegR].parent_ = &worldTransform_[PartId::Hip];
+	worldTransform_[PartId::LegR].Initialize();
+
+
+	////カメラ視点座標を設定
+	//viewProjection_.eye = {0, 0, -50};
+	////カメラ注視点座標を設定
+	//viewProjection_.target = {0, 0, 0};
+	////カメラ上方向ベクトルを設定（右上45度指定）
+	//viewProjection_.up = {cosf(XM_PI / 4.0f), sinf(XM_PI / 4.0f), 0.0f};
+	
 	//カメラ垂直方向視野角を設定
-	viewProjection_.fovAngleY = XMConvertToRadians(50.0f);
+	viewProjection_.fovAngleY = XMConvertToRadians(45.0f);
 
 	//アスペクト比を設定
-	//viewProjection_.aspectRatio = 1.0f;
+	//viewProjection_.aspectRatio = 0.0f;
 
 	//ニアクリップ距離を設定
-	viewProjection_.nearZ = 52.0f;
+	viewProjection_.nearZ = 45.0f;
 	//ファークリアップ距離をせってい
 	viewProjection_.farZ = 53.0f;
 
 
+
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
 
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.png");
 }
 
 void GameScene::Update() {
-
+	/*
 	//　視点移動処理
 	{
 		//　視点の移動ベクトル
@@ -145,6 +181,7 @@ void GameScene::Update() {
 			viewProjection_.up.z);
 
 	}
+	
 
 	// FoV変更処理	
 	{
@@ -181,6 +218,7 @@ void GameScene::Update() {
 		debugText_->SetPos(50, 130);
 		debugText_->Printf("nearZ:%f", viewProjection_.nearZ);
 	}
+	*/
 
 	//キャラクター移動処理
 	{
@@ -196,12 +234,60 @@ void GameScene::Update() {
 		} else if (input_->PushKey(DIK_RIGHT)) {
 			move = {kCharacterSpeed, 0, 0};
 		}
+		//下半身回転処理
+		{
+			//下半身の回転速さ[ラジアン/frame]
+			const float kChestRotSpeed = 0.05f;
+
+			// 押した方向で移動ベクトルを変更
+			if (input_->PushKey(DIK_U)) {
+				worldTransform_[PartId::Chest].rotation_.y -= kChestRotSpeed;
+			} else if (input_->PushKey(DIK_I)) {
+				worldTransform_[PartId::Chest].rotation_.y += kChestRotSpeed;
+			}
+		}
+		
+		//下半身回転処理
+		{
+			//下半身の回転速さ[ラジアン/frame]
+			const float kHipRotSpeed = 0.05f;
+
+			// 押した方向で移動ベクトルを変更
+			if (input_->PushKey(DIK_J)) {
+				worldTransform_[PartId::Hip].rotation_.y -= kHipRotSpeed;
+			} else if (input_->PushKey(DIK_K)) {
+				worldTransform_[PartId::Hip].rotation_.y += kHipRotSpeed;
+			}
+		}
+
+
+
+		//行列の再計算
+		worldTransform_[PartId::Root].UpdateMatrix();
+		worldTransform_[PartId::Spine].UpdateMatrix();
+		worldTransform_[PartId::Chest].UpdateMatrix();
+		worldTransform_[PartId::Head].UpdateMatrix();
+		worldTransform_[PartId::ArmL].UpdateMatrix();
+		worldTransform_[PartId::ArmR].UpdateMatrix();
+		worldTransform_[PartId::Hip].UpdateMatrix();
+		worldTransform_[PartId::LegL].UpdateMatrix();
+		worldTransform_[PartId::LegR].UpdateMatrix();
+
 
 		//注視点移動（ベクトルの加算）
-		
+		worldTransform_[PartId::Root].translation_.x += move.x;
+		worldTransform_[PartId::Root].translation_.y += move.y;
+		worldTransform_[PartId::Root].translation_.z += move.z;
 
-
+		//デバッグ用表示
+		debugText_->SetPos(50, 150);
+		debugText_->Printf(
+		  "Root:(%f,%f,%f)", 
+		worldTransform_[PartId::Root].translation_.x += move.x,
+		worldTransform_[PartId::Root].translation_.x += move.y,
+		worldTransform_[PartId::Root].translation_.x += move.z);
 	}
+	
 }
 
 void GameScene::Draw() {
@@ -231,10 +317,23 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	for (size_t i = 0; i < _countof(worldTransform_); i++) {
+	/*for (size_t i = 0; i < _countof(worldTransform_); i++) {
 
 		model_->Draw(worldTransform_[i], viewProjection_, textureHandle_);
-	}
+	}*/
+	//キャラクターの描画
+	//model_->Draw(worldTransform_[PartId::Root], viewProjection_, textureHandle_);
+	//model_->Draw(worldTransform_[PartId::Spine], viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_[PartId::Chest], viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_[PartId::Head], viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_[PartId::ArmL], viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_[PartId::ArmR], viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_[PartId::Hip], viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_[PartId::LegL], viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_[PartId::LegR], viewProjection_, textureHandle_);
+	
+
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
