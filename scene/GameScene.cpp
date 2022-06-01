@@ -19,7 +19,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
-	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
+	//debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 
 
@@ -76,7 +76,7 @@ void GameScene::Update() {
 	//	worldTransform_.translation_.z);
 
 	//デバッグカメラの更新
-	debugCamera_->Update();
+	//debugCamera_->Update();
 
 	//自キャラ更新
 	player_->Update();

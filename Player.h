@@ -29,14 +29,6 @@ private:
 
 
 public:
-	float transformX = 0.0f;
-	float transformY = 0.0f;
-	float rotation = 0.0f;
-	float scale = 1.0f;
-
-	float affin[4][4] = {
-		{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f} };
-
 
 	//Vector3
 	Vector3 scale_;

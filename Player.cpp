@@ -45,7 +45,10 @@ void Player::Update(){
 	worldTransform_.TransferMatrix();
 
 	
-
+	////デバッグテキストの表示
+	//debugText_->SetPos(40, 50);
+	//debugText_->Printf();
+	
 
 
 }
