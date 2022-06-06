@@ -49,83 +49,36 @@ class GameScene {
 	DebugText* debugText_ = nullptr;
 	DebugCamera* debugCamera_ = nullptr;
 
-	Vector3 box[8] = {
-	  {0.0f, 0.0f, 0.0f},
-      {5.0f, 0.0f, 0.0f},
-      {5.0f, 0.0f, 5.0f},
-      {0.0f, 0.0f, 5.0f},
-	  {0.0f, 5.0f, 0.0f},
-      {5.0f, 5.0f, 0.0f},
-      {5.0f, 5.0f, 5.0f},
-      {0.0f, 5.0f, 5.0f}
-    };
-	Vector3 boxScale[8];
-	Vector3 boxRotate[8];
-	Vector3 boxTrans[8];
+	
 
-	Vector4 scale[4] = {
-	  {2.0f, 0.0f, 0.0f, 0.0f},
-	  {0.0f, 2.0f, 0.0f, 0.0f},
-	  {0.0f, 0.0f, 2.0f, 0.0f},
-	  {0.0f, 0.0f, 0.0f, 1.0f}
-    };
-
-	Vector4 scale1[4];
-	Vector4 scale2[4];
-	Vector4 scale3[4];
-
-	Vector4 rotateX[4] = {
-	  {1.0f, 0.0f,     0.0f,    0.0f},
-	  {0.0f, 0.7071f,  0.7071f, 0.0f},
-	  {0.0f, -0.7071f, 0.7071f, 0.0f},
-	  {0.0f, 0.0f,     0.0f,    1.0f}
-    };
-	Vector4 rotateY[4] = {
-	  {0.7071f, 0.0f, -0.7071f, 0.0f},
-	  {0.0f,    1.0f, 0.0f,     0.0f},
-	  {0.7071f, 0.0f, 0.7071f,  0.0f},
-	  {0.0f,    0.0f, 0.0f,     1.0f}
-    };
-	Vector4 rotateZ[4] = {
-	  {0.7071f,  0.7071f, 0.0f, 0.0f},
-	  {-0.7071f, 0.7071f, 0.0f, 0.0f},
-	  {0.0f,     0.0f,    1.0f, 0.0f},
-	  {0.0f,     0.0f,    0.0f, 1.0f}
-    };
-
-	Vector3 rotateX1[8];
-	Vector3 rotateY1[8];
-	Vector3 rotateZ1[8];
-	Vector3 rotateX2[8];
-	Vector3 rotateY2[8];
-	Vector3 rotateZ2[8];
-
-	Vector4 translation[4] = {
-	  {1.0f, 0.0f, 0.0f, 10.0f},
-	  {0.0f, 1.0f, 0.0f, 10.0f},
-	  {0.0f, 0.0f, 1.0f, 10.0f},
-	  {0.0f, 0.0f, 0.0f, 1.0f }
-    };
-	Vector4 translation1[4];
-	Vector4 translation2[4];
-	Vector4 translation3[4];
-
-	int edgeList[12][2] = {
-	  {0, 1},
-      {1, 2},
-      {2, 3},
-      {3, 0},
-
-	  {0, 4},
-      {1, 5},
-      {2, 6},
-      {3, 7},
-
-	  {4, 5},
-      {5, 6},
-      {6, 7},
-      {7, 4}
-    };
+	Vector3 startLineX_[5] = {
+	  {10,  0, -10},
+      {5,   0, -10},
+      {0,   0, -10},
+      {-5,  0, -10},
+      {-10, 0, -10},
+	};
+	Vector3 endtLineX_[5] = {
+	  {10,  0, 10},
+      {5,   0, 10},
+      {0,   0, 10},
+      {-5,  0, 10},
+      {-10, 0, 10},
+	};
+	Vector3 startLineZ_[5] = {
+	  {10,  0, 10 },
+      {10,  0, 5  },
+      {-10, 0, -0 },
+      {-10, 0, -5 },
+      {-10, 0, -10},
+	};
+	Vector3 endtLineZ_[5] = {
+	  {-10, 0, 10 },
+      {-10, 0, 5  },
+      {10,  0, 0  },
+      {10,  0, -5 },
+      {10,  0, -10},
+	};
 
 	Vector4 coloer[8] = {
 	  {255, 255, 255, 255},
