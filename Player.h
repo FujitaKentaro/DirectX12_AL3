@@ -12,6 +12,8 @@
 class Player
 {
 private:
+
+
 //	ワールド変換データ
 	WorldTransform worldTransform_;
 //モデル
@@ -29,6 +31,19 @@ private:
 
 
 public:
+	const float PI = 3.141592f;
+	
+  float transformX = 0.0f;
+  float transformY = 0.0f;
+  float rotation = 0.0f;
+  float scale = 1.0f;
+
+  float affin[3][3] = {
+	{1.0f, 0.0f, 0.0f},
+    {0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f}
+  };
+
 
 	//Vector3
 	Vector3 scale_;
