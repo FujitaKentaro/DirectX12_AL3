@@ -1,11 +1,17 @@
 #include "Affin.h"
 #include "math.h"
 
-//èâä˙âª
+/// <summary>
+/// íPà çsóÒê›íË
+/// </summary>
 Matrix4 Affin::matUnit() {
 
-	matUnit_ = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	            0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+	matUnit_ = {
+		1.0f, 0.0f, 0.0f, 0.0f, 
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f};
+
 	return matUnit_;
 }
 
@@ -88,6 +94,10 @@ Matrix4 Affin::matRotateZ(float rotationZ) {
 
 	return matRotZ_;
 }
+
+/// <summary>
+/// âÒì] Z->X->Y
+/// </summary>
 Matrix4 Affin::matRotation(float rotateX, float rotateY, float rotateZ) {
 
 	Matrix4 x = matRotateX(rotateX); 

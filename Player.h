@@ -13,7 +13,6 @@
 class Player
 {
 private:
-  public:
 
 
 //	ワールド変換データ
