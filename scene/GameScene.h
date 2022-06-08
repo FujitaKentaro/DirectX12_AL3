@@ -83,21 +83,6 @@ private: // メンバ変数
 	Vector3 translation;
 
 
-	// 単位行列
-	Matrix4 matUnit={
-		1.0f,0.0f,0.0f,0.0f,
-		0.0f,1.0f,0.0f,0.0f,
-		0.0f,0.0f,1.0f,0.0f,
-		0.0f,0.0f,0.0f,1.0f
-	};
-
-	//行列
-	Matrix4 matScale;
-	Matrix4 matTrance;
-	Matrix4 matRotateX;
-	Matrix4 matRotateY;
-	Matrix4 matRotateZ;
-
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

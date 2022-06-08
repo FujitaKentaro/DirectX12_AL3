@@ -26,12 +26,7 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 
-	// X,Y,Z 方向のスケーリングを設定
-	scale = { 5.0f, 5.0f, 5.0f };
-	// X,Y,Z 軸回りの回転角を設定
-	rotate = { XM_PI / 4.0f, XM_PI / 4.0f, 0.0f };
-	// X,Y,Z 軸回りの平行移動を設定
-	translation = { 10.0f, 10.0f, 10.0f };
+	
 
 	//ワールドトランスフォームの初期化
 	//worldTransform_.Initialize();
@@ -62,18 +57,7 @@ void GameScene::Update() {
 
 
 	////デバッグテキストの表示
-	//debugText_->SetPos(40, 50);
-	//debugText_->Printf(
-	//	"toranslation:(%f,%f,%f)\n", worldTransform_.scale_.x, worldTransform_.scale_.y,
-	//	worldTransform_.scale_.z);
-	//debugText_->SetPos(40, 70);
-	//debugText_->Printf(
-	//	"lotation:(%f,%f,%f)\n", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
-	//	worldTransform_.rotation_.z);
-	//debugText_->SetPos(40, 90);
-	//debugText_->Printf(
-	//	"scale:(%f,%f,%f)\n", worldTransform_.translation_.x, worldTransform_.translation_.y,
-	//	worldTransform_.translation_.z);
+	
 
 	//デバッグカメラの更新
 	//debugCamera_->Update();

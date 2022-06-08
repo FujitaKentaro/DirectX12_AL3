@@ -4,6 +4,7 @@
 #include <cassert>
 #include "Input.h"
 #include "DebugText.h"
+#include "Affin.h"
 
 
 /// <summary>
@@ -12,6 +13,7 @@
 class Player
 {
 private:
+  public:
 
 
 //	ワールド変換データ
@@ -21,43 +23,13 @@ private:
 //テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
+	Affin affin_;
 
 //input 
 	Input* input_;
 //debugText
 	DebugText* debugText_;
-
-
-
-
-public:
-	const float PI = 3.141592f;
 	
-  float transformX = 0.0f;
-  float transformY = 0.0f;
-  float rotation = 0.0f;
-  float scale = 1.0f;
-
-  float affin[3][3] = {
-	{1.0f, 0.0f, 0.0f},
-    {0.0f, 1.0f, 0.0f},
-    {0.0f, 0.0f, 1.0f}
-  };
-
-
-	//Vector3
-	Vector3 scale_;
-	Vector3 rotate_;
-	Vector3 translation_;
-
-
-	// 単位行列
-	Matrix4 matUnit_={
-		1.0f,0.0f,0.0f,0.0f,
-		0.0f,1.0f,0.0f,0.0f,
-		0.0f,0.0f,1.0f,0.0f,
-		0.0f,0.0f,0.0f,1.0f
-	};
 
 public:
 /// <summary>
