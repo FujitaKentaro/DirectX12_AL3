@@ -3,11 +3,13 @@
 #include "Vector3.h"
 #include "WorldTransform.h"
 
-
+/// <summary>
+/// アフィン行列 （角度指定：度数法）
+/// </summary>
 namespace Affin {  
 
 	//円周率
-	float PI = 3.14159f;
+	const float PI = 3.141592654f;
 	// 度数法 -> ラジアン変換
 	float radConvert(float value);
 

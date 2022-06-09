@@ -69,18 +69,22 @@ private: // メンバ変数
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 
-	//字キャラ
-	Player* player_ = nullptr;
+	//自キャラ
+	Player* player_[100];
+	
 
 	//ワールドトランスフォーム
 	//WorldTransform worldTransform_;
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 
-	//Vector3
-	Vector3 scale ;
-	Vector3 rotate;
-	Vector3 translation;
+	//カメラ上方向の角度
+	float viewAngle = 0.0f;
+
+	////Vector3
+	//Vector3 scale ;
+	//Vector3 rotate;
+	//Vector3 translation;
 
 
 	/// <summary>
