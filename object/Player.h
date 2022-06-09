@@ -22,8 +22,6 @@ private:
 //テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
-	Affin affin_;
-
 //input 
 	Input* input_;
 //debugText

@@ -21,9 +21,9 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 		Vector3 rotatte = {45, 45, 45};
 		Vector3 scale = {2, 2, 2};
 
-		Matrix4 matWorld_= affin_.matUnit();
+		Matrix4 matWorld_= Affin::matUnit();
 
-		matWorld_ = affin_.matWorld(move,rotatte,scale);
+		matWorld_ = Affin::matWorld(move,rotatte,scale);
 
 		worldTransform_.matWorld_ *= matWorld_;
 
