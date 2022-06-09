@@ -4,25 +4,10 @@
 #include "WorldTransform.h"
 
 
-class Affin {
+namespace Affin {  
 
-  private:
-	 //‰~Žü—¦
+	//‰~Žü—¦
 	float PI = 3.14159f;
-
-	//s—ñéŒ¾
-	Matrix4 matTrans_;	
-	Matrix4 matRotX_;		
-	Matrix4 matRotY_;	
-	Matrix4 matRotZ_;	
-	Matrix4 matRot_;
-	Matrix4 matScale_;
-	Matrix4 matWorld_;
-
-	// ’PˆÊs—ñ
-	Matrix4 matUnit_;
-
-  public:
 	// “x”–@ -> ƒ‰ƒWƒAƒ“•ÏŠ·
 	float radConvert(float value);
 
@@ -43,4 +28,4 @@ class Affin {
 
 	//Šgk -> ‰ñ“] -> ˆÚ“®
 	Matrix4 matWorld(Vector3 move, Vector3 rotate, Vector3 scale);
-};
+}// namespace Affin
