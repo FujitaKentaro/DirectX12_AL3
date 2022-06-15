@@ -22,7 +22,7 @@ static std::uniform_real_distribution<float> distR(0,360);
 class Player {
   private:
 	//	ワールド変換データ
-	WorldTransform worldTransform_;
+	WorldTransform worldTransform_[10];
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル
@@ -32,6 +32,23 @@ class Player {
 	Input* input_;
 	// debugText
 	DebugText* debugText_;
+
+public:
+
+	//パーツID
+  enum PartId {
+	  kRoot,	// 大元
+	  kSpine,	// 脊椎
+	  kChest,	// 胸
+	  kHead,	// 頭
+	  kArmL,	// 左腕
+	  kArmR,	// 右腕
+	  kHip,		// 尻
+	  kLegL,	// 左あし
+	  kLegR,	// 右あし
+
+	  kNumPartId
+  };
 
   private:
 
@@ -55,6 +72,8 @@ class Player {
 	/// 描画
 	/// </summary>
 	void Draw(ViewProjection viewProjection);
+
+	void PartUpdate(WorldTransform& worldTransfom);
 
 	
 };
