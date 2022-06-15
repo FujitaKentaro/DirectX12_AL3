@@ -13,10 +13,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete sprite_;
-	for (int i = 0; i < 100; i++) {
-		delete player_[i];
-	}
-	
+	delete player_;	
 }
 
 void GameScene::Initialize() {
@@ -32,19 +29,6 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();	
 
-	//ワールドトランスフォームの初期化
-	//worldTransform_.Initialize();
-	
-	//カメラ垂直方向視野角を設定
-	//viewProjection_.fovAngleY = Affin::radConvert(50.0f);
-
-	//アスペクト比を設定
-	//viewProjection_.aspectRatio = 1.0f;
-
-	//// ニアクリップ距離を設定
-	//viewProjection_.nearZ = 52.0f;
-	//// ファークリップ距離を設定
-	//viewProjection_.farZ = 53.0f;
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -66,167 +50,25 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
 		//自キャラの生成
-	for (int i = 0; i < 100; i++) {
-		player_[i] = new Player();
+	
+		player_ = new Player();
 		//自キャラの初期化
-		player_[i]->Initialize(model_, textureHandle_);
-	
-	}
-	
+		player_->Initialize(model_, textureHandle_);	
 
 }
 
 void GameScene::Update() {
 
 
-//デバッグテキストの表示
+	//デバッグテキストの表示
 
 
-//デバッグカメラの更新
-//debugCamera_->Update();
-
-#pragma region 視点移動処理
-
-	//{
-	//	// 視点の移動ベクトル
-	//	Vector3 move = MathUtility::Vector3Zero();
-
-	//	// 視点の移動の速さ
-	//	const float kEyeSpeed = 0.2f;
-
-	//	// 押した方向で移動ベクトルを変更
-	//	if (input_->PushKey(DIK_W)) {
-	//		move.z += kEyeSpeed;
-	//	} else if (input_->PushKey(DIK_S)) {
-	//		move.z -= kEyeSpeed;
-	//	}
-
-	//	// 視点移動 (ベクトルの加算)
-	//	viewProjection_.eye += move;
-
-	//	// 行列の再計算
-	//	viewProjection_.UpdateMatrix();
-
-	//	// デバッグ用表示
-	//	debugText_->SetPos(50, 50);
-	//	debugText_->Printf(
-	//	  "eye :%f,%f,%f", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z);
-
-	//}
-
-#pragma endregion
-
-#pragma region 注視点移動処理
-
-	//{
-	//	// 注視点の移動ベクトル
-	//	Vector3 move = MathUtility::Vector3Zero();
-
-	//	// 注視点の移動の速さ
-	//	const float kEyeSpeed = 0.2f;
-
-	//	// 押した方向で移動ベクトルを変更
-	//	if (input_->PushKey(DIK_LEFT)) {
-	//		move.z += kEyeSpeed;
-	//	} else if (input_->PushKey(DIK_RIGHT)) {
-	//		move.z -= kEyeSpeed;
-	//	}
-
-	//	// 注視点移動 (ベクトルの加算)
-	//	viewProjection_.target += move;
-
-	//	// 行列の再計算
-	//	viewProjection_.UpdateMatrix();
-
-	//	// デバッグ用表示
-	//	debugText_->SetPos(50, 70);
-	//	debugText_->Printf(
-	//	  "eye :%f,%f,%f", viewProjection_.target.x, viewProjection_.target.y, viewProjection_.target.z);
-	//}
-
-#pragma endregion
-
-#pragma region 上方向回転処理
-
-	//{
-
-	//	// 上方向の回転の速さ[ラジアン/frame]
-	//	const float kUpRotSpeed = 0.05f;
-
-	//	// 押した方向で移動ベクトルを変更
-	//	if (input_->PushKey(DIK_SPACE)) {
-	//		viewAngle += kUpRotSpeed;
-	//		//2pi を超えたら0に戻す
-	//		viewAngle = fmodf(viewAngle, Affin::PI * 2.0f);		
-	//	}
-
-
-	//	// 注視点移動 (ベクトルの加算)
-	//	viewProjection_.up = {cosf(viewAngle), sinf(viewAngle),0.0f};
-
-	//	// 行列の再計算
-	//	viewProjection_.UpdateMatrix();
-
-	//	// デバッグ用表示
-	//	debugText_->SetPos(50, 90);
-	//	debugText_->Printf(
-	//	  "eye :%f,%f,%f", viewProjection_.up.x, viewProjection_.up.y,
-	//	  viewProjection_.up.z);
-	//}
-
-#pragma endregion
-
-#pragma region FoV変更処理
-
-// FoV変更処理
-{
-	//// 上キーで視野角が広がる
-	//if (input_->PushKey(DIK_UP)) {
-	//	viewProjection_.fovAngleY += 0.01;
-	//	viewProjection_.fovAngleY = min(max(viewProjection_.fovAngleY, 0.01),Affin::radConvert(180));
-	//} else if (input_->PushKey(DIK_DOWN)) {
-	//	viewProjection_.fovAngleY -= 0.01;
-	//	viewProjection_.fovAngleY = min(max(viewProjection_.fovAngleY, 0.01), Affin::radConvert(180));
-	//}
-
-	////行列の再計算
-	//viewProjection_.UpdateMatrix();
-
-	////デバッグ用表示
-	//debugText_->SetPos(50, 110);
-	//debugText_->Printf("fovAngleY(Degree):%f", Affin::degConvert(viewProjection_.fovAngleY));
-
-
-}
-
-#pragma endregion
-
-#pragma region クリップ距離変更処理
-
-// クリップ距離変更処理
-{
-	// 上キーでニアクリップ距離を増減
-	if (input_->PushKey(DIK_UP)) {
-		viewProjection_.nearZ += 0.1;
-	} else if (input_->PushKey(DIK_DOWN)) {
-		viewProjection_.nearZ -= 0.1;
-	}
-
-	//行列の再計算
-	viewProjection_.UpdateMatrix();
-
-	//デバッグ用表示
-	debugText_->SetPos(50, 130);
-	debugText_->Printf("nearZ:%f",viewProjection_.nearZ);
-}
-
-#pragma endregion
+	//デバッグカメラの更新
+	//debugCamera_->Update();
 
 
 	//自キャラ更新
-	for (int i = 0; i < 100; i++) {
-		player_[i]->Update();
-	}
+	player_->Update();	
 	
 
 }
@@ -259,10 +101,8 @@ void GameScene::Draw() {
 	/// </summary>
 	//model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
-	//自キャラ描画
-	for (int i = 0; i < 100; i++) {
-		player_[i]->Draw(viewProjection_);
-	}
+	//自キャラ描画	
+	player_->Draw(viewProjection_);	
 
 
 	

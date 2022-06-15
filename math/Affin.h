@@ -20,15 +20,18 @@ namespace Affin {
 
 	// •½sˆÚ“®
 	Matrix4 matTrans(float moveX, float moveY, float moveZ);
+    Matrix4 matTrans(Vector3 move);
 	
 	// ‰ñ“]
 	Matrix4 matRotateX(float rotationX);
 	Matrix4 matRotateY(float rotationY);
 	Matrix4 matRotateZ(float rotationZ);
 	Matrix4 matRotation(float rotateX, float rotateY, float rotateZ);
+    Matrix4 matRotation(Vector3 rotate);
 
 	//Šgk
 	Matrix4 matScale(float scaleX, float scaleY, float scaleZ);
+    Matrix4 matScale(Vector3 scale);
 
 	//Šgk -> ‰ñ“] -> ˆÚ“®
 	Matrix4 matWorld(Vector3 move, Vector3 rotate, Vector3 scale);

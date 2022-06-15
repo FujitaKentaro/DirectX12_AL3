@@ -33,6 +33,21 @@ Matrix4 Affin::matTrans(float moveX, float moveY, float moveZ) {
 }
 
 /// <summary>
+/// ïΩçsà⁄ìÆ
+/// </summary>
+Matrix4 Affin::matTrans(Vector3 move) {
+	Matrix4 matTrans;
+
+	matTrans = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f,  1.0f,  0.0f,  0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		move.x, move.y, move.z, 1.0f};
+
+	return matTrans;
+}
+
+/// <summary>
 /// ìxêîñ@ -> ÉâÉWÉAÉì
 /// </summary>
 float Affin::radConvert(float value) {
@@ -42,6 +57,7 @@ float Affin::radConvert(float value) {
 
 	return radValue;
 }
+
 /// <summary>
 /// ÉâÉWÉAÉì -> ìxêîñ@
 /// </summary>
@@ -128,6 +144,23 @@ Matrix4 Affin::matRotation(float rotateX, float rotateY, float rotateZ) {
 }
 
 /// <summary>
+/// âÒì] Z->X->Y
+/// </summary>
+Matrix4 Affin::matRotation(Vector3 rotate) {
+
+	Matrix4 x = matRotateX(rotate.x);
+	Matrix4 y = matRotateY(rotate.y);
+	Matrix4 z = matRotateZ(rotate.z);
+	Matrix4 matRot;
+
+	x *= z;
+	y *= x;
+	matRot = y;
+
+	return matRot;
+}
+
+/// <summary>
 /// ägèk
 /// </summary>
 Matrix4 Affin::matScale(float scaleX, float scaleY, float scaleZ) {
@@ -143,12 +176,27 @@ Matrix4 Affin::matScale(float scaleX, float scaleY, float scaleZ) {
 }
 
 /// <summary>
+/// ägèk
+/// </summary>
+Matrix4 Affin::matScale(Vector3 scale) {
+
+	Matrix4 matScale = {
+		scale.x, 0.0f, 0.0f, 0.0f,
+		0.0f, scale.y, 0.0f, 0.0f,
+		0.0f, 0.0f, scale.z, 0.0f,
+		0.0f, 0.0f,    0.0f, 1.0f
+	};
+
+	return matScale;
+}
+
+/// <summary>
 /// ägèk*âÒì]*à⁄ìÆ
 /// </summary>
 Matrix4 Affin::matWorld(Vector3 move, Vector3 rotate, Vector3 scale) {
-	Matrix4 scaleM = matScale(scale.x, scale.y, scale.z);
-	Matrix4 rotateM = matRotation(rotate.x, rotate.y, rotate.z);
-	Matrix4 moveM = matTrans(move.x, move.y, move.z);
+	Matrix4 scaleM = matScale(scale);
+	Matrix4 rotateM = matRotation(rotate);
+	Matrix4 moveM = matTrans(move);
 	Matrix4 matWorld;
 
 	rotateM *= scaleM;
