@@ -42,6 +42,16 @@ float Affin::radConvert(float value) {
 
 	return radValue;
 }
+/// <summary>
+/// ラジアン -> 度数法
+/// </summary>
+float Affin::degConvert(float value) {
+	float degValue;
+
+	degValue = value * (180 / PI);
+
+	return degValue;
+}
 
 
 

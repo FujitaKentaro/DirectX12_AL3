@@ -12,6 +12,8 @@ namespace Affin {
 	const float PI = 3.141592654f;
 	// 度数法 -> ラジアン変換
 	float radConvert(float value);
+    // ラジアン -> 度数法変換 
+    float degConvert(float value);
 
 	// 単位行列 set
 	Matrix4 matUnit();
