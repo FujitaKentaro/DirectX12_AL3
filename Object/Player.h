@@ -6,6 +6,8 @@
 #include "WorldTransform.h"
 #include <cassert>
 
+#include "PlayerBullet.h"
+
 
 /// <summary>
 /// 自キャラ
@@ -24,25 +26,14 @@ class Player {
 	// debugText
 	DebugText* debugText_= nullptr;
 
+	//弾
+	PlayerBullet* bullet_ = nullptr;
+
 public:
 
 	////パーツID
- // enum PartId {
-	//  kRoot,	// 大元
-	//  kSpine,	// 脊椎
-	//  kChest,	// 胸
-	//  kHead,	// 頭
-	//  kArmL,	// 左腕
-	//  kArmR,	// 右腕
-	//  kHip,		// 尻
-	//  kLegL,	// 左あし
-	//  kLegR,	// 右あし
-
-	//  kNumPartId
- // };
-
-
-  public:
+ 
+public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -58,11 +49,22 @@ public:
 	/// </summary>
 	void Draw(ViewProjection viewProjection);
 
+	/// <summary>
+	/// 平行移動
+	/// </summary>
+	void Move();
+	/// <summary>
+	/// 回転移動
+	/// </summary>
+	void Rotate();
 
 	/// <summary>
 	/// 行列の計算
 	/// </summary>
 	void MatUpdate(WorldTransform& worldTransfom);
 
-	
+	/// <summary>
+	/// 攻撃
+	/// </summary>
+	void Attack();
 };
