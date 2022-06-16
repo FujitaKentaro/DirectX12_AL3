@@ -78,6 +78,9 @@
     <ClCompile Include="Object\Player.cpp">
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Object\PlayerBullet.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -165,6 +168,9 @@
       <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
     <ClInclude Include="Object\Player.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerBullet.h">
       <Filter>ヘッダー ファイル\Object</Filter>
     </ClInclude>
   </ItemGroup>
