@@ -22,7 +22,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
-	//debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
+	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 
 
@@ -49,8 +49,7 @@ void GameScene::Initialize() {
 	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
-		//自キャラの生成
-	
+		//自キャラの生成	
 		player_ = new Player();
 		//自キャラの初期化
 		player_->Initialize(model_, textureHandle_);	
@@ -60,14 +59,33 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 
-	//デバッグテキストの表示
+	// デバッグテキストの表示
+
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_P)&& isDebugcameraActive_ == false) {
+		isDebugcameraActive_ = true;	
+	}else if (input_->TriggerKey(DIK_P) && isDebugcameraActive_ == true) {
+		isDebugcameraActive_ = false;
+	}
+
+#endif // _DEBUG
+	
+	// カメラの処理
+	if (isDebugcameraActive_ == true) {
+		//デバッグカメラの更新
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+
+		viewProjection_.TransferMatrix();	
+	} else {
+		viewProjection_.UpdateMatrix();
+		viewProjection_.TransferMatrix();
+	}
+	
 
 
-	//デバッグカメラの更新
-	//debugCamera_->Update();
-
-
-	//自キャラ更新
+	// 自キャラ更新
 	player_->Update();	
 	
 
@@ -103,8 +121,6 @@ void GameScene::Draw() {
 
 	//自キャラ描画	
 	player_->Draw(viewProjection_);	
-
-
 	
 
 	// 3Dオブジェクト描画後処理
