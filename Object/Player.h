@@ -5,6 +5,8 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include <cassert>
+#include <memory>
+#include <list>
 
 #include "PlayerBullet.h"
 
@@ -27,7 +29,7 @@ class Player {
 	DebugText* debugText_= nullptr;
 
 	//’e
-	PlayerBullet* bullet_ = nullptr;
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
 public:
 
