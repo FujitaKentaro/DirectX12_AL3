@@ -12,6 +12,7 @@
 #include "DebugCamera.h"
 #include <DirectXMath.h>
 #include"Player.h"
+#include "Enemy.h"
 
 /// <summary>
 /// ゲームシーン
@@ -68,9 +69,12 @@ private: // メンバ変数
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
+	uint32_t eneTextureHandle_ = 0;
+	
 
 	//自キャラ
 	Player* player_;
+	Enemy* enemy_;
 	
 
 	//ワールドトランスフォーム

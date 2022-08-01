@@ -14,6 +14,7 @@ GameScene::~GameScene() {
 	delete model_;
 	delete sprite_;
 	delete player_;	
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -54,6 +55,10 @@ void GameScene::Initialize() {
 		//自キャラの初期化
 		player_->Initialize(model_, textureHandle_);	
 
+		//自キャラの生成
+	    enemy_ = new Enemy();
+	    //自キャラの初期化
+	    enemy_->Initialize(model_);
 }
 
 void GameScene::Update() {
@@ -87,7 +92,7 @@ void GameScene::Update() {
 
 	// 自キャラ更新
 	player_->Update();	
-	
+	enemy_->Update();
 
 }
 
@@ -121,7 +126,7 @@ void GameScene::Draw() {
 
 	//自キャラ描画	
 	player_->Draw(viewProjection_);	
-	
+	enemy_->Draw(viewProjection_);	
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
