@@ -8,6 +8,11 @@
 #include <memory>
 #include <list>
 
+enum class Phase {
+	None,     // í‚é~
+	Approach, // ê⁄ãﬂ
+	Leave,    // ó£íE
+};
 
 class Enemy {
   private:
@@ -23,7 +28,7 @@ class Enemy {
 	// debugText
 	DebugText* debugText_ = nullptr;
 
-
+	Phase phase_ = Phase::None;
 
   public:
 	void Initialize(Model* model);
@@ -36,3 +41,5 @@ class Enemy {
 	void MatUpdate(WorldTransform& worldTransfom);
 
 };
+
+

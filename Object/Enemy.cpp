@@ -24,10 +24,28 @@ void Enemy::Initialize(Model* model) {
 /// </summary>
 void Enemy::Update() {
 
-	worldTransform_.translation_.z += -0.05f;
+	
 
 	//çsóÒçXêV
 	MatUpdate(worldTransform_);
+
+	switch (phase_) {
+	case Phase::None:
+		
+	case Phase::Approach:
+	default:
+		worldTransform_.translation_.z += -0.05f;
+		if (worldTransform_.translation_.z < 0.0f) {
+			phase_ = Phase::Leave;
+		}
+
+		break;
+	case Phase::Leave:
+
+		worldTransform_.translation_.x += -0.1f;
+		worldTransform_.translation_.y += 0.1f;
+		break;	
+	}
 
 
 	debugText_->SetPos(10, 50);
