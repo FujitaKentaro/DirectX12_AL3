@@ -9,7 +9,8 @@
 #include <list>
 #include <memory>
 
-#include "Player.h"
+//#include "Player.h"
+
 // 自機クラスの前方宣言
 class Player;
 
