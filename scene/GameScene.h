@@ -73,8 +73,8 @@ private: // メンバ変数
 	
 
 	//自キャラ
-	Player* player_;
-	Enemy* enemy_;
+	Player* player_=nullptr;
+	Enemy* enemy_=nullptr;
 	
 
 	//ワールドトランスフォーム

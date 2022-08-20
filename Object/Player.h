@@ -31,6 +31,8 @@ class Player {
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
+	
+
 public:
 
 	////パーツID
@@ -64,6 +66,11 @@ public:
 	/// 行列の計算
 	/// </summary>
 	void MatUpdate(WorldTransform& worldTransfom);
+	
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>	
+	Vector3 GetWorldPosition();
 
 	/// <summary>
 	/// 攻撃

@@ -9,6 +9,10 @@
 #include <list>
 #include <memory>
 
+#include "Player.h"
+// 自機クラスの前方宣言
+class Player;
+
 enum class Phase {
 	None,     // 停止
 	Approach, // 接近
@@ -29,6 +33,9 @@ class Enemy {
 	// debugText
 	DebugText* debugText_ = nullptr;
 
+	// 自キャラ
+	Player* player_ = nullptr;
+
 	//弾
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 
@@ -43,6 +50,7 @@ class Enemy {
 	void Initialize(Model* model);
 	void Update();
 	void Draw(ViewProjection viewProjection);
+	void SetPlayer(Player* player);
 
 	/// <summary>
 	/// 行列の計算
@@ -58,4 +66,9 @@ class Enemy {
 	/// 接近フェーズ初期化
 	/// </summary>
 	void ApproachInitialize();
+
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	Vector3 GetWorldPosition();
 };

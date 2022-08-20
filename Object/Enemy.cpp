@@ -92,6 +92,14 @@ void Enemy::Draw(ViewProjection viewProjection) {
 	}
 }
 
+/// <summary>
+/// 自キャラを借りてくる
+/// </summary>
+void Enemy::SetPlayer(Player* player) { player_ = player; }
+
+/// <summary>
+/// 行列更新
+/// </summary>
 void Enemy::MatUpdate(WorldTransform& worldTransform_) {
 
 	// パーツの更新
@@ -114,10 +122,22 @@ void Enemy::MatUpdate(WorldTransform& worldTransform_) {
 /// </summary>
 void Enemy::Fire() {
 
-	//弾の速度
-	const float kBulletSpeed = -1.0f;
-	Vector3 velocity(0, 0, kBulletSpeed);
+	assert(player_);
 
+	//弾の速度
+	const float kBulletSpeed = 0.5f;	
+
+	Vector3 playerPos = player_->GetWorldPosition();
+	Vector3 enePos = GetWorldPosition();
+	
+	Vector3 a;
+	a.x = playerPos.x - enePos.x;
+	a.y = playerPos.y - enePos.y;
+	a.z = playerPos.z - enePos.z;
+	Vector3 nomal = MathUtility::Vector3Normalize(a);
+
+	Vector3 velocity(nomal.x * kBulletSpeed, nomal.y * kBulletSpeed, nomal.z * kBulletSpeed);
+	
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = Affin::VecMat(velocity, worldTransform_.matWorld_);
 
@@ -135,4 +155,18 @@ void Enemy::Fire() {
 void Enemy::ApproachInitialize() {
 	// 発射タイマーを初期化
 	fireTimer_ = kFireInterval;
+}
+
+/// <summary>
+/// ワールド座標を取得
+/// </summary>
+Vector3 Enemy::GetWorldPosition() {
+	//
+	Vector3 worldPos;
+	//
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
 }
