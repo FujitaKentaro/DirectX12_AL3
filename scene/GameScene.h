@@ -11,8 +11,10 @@
 //#include "WorldTransform.h"
 #include "DebugCamera.h"
 #include <DirectXMath.h>
+#include <memory>
 #include"Player.h"
 #include "Enemy.h"
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -65,6 +67,7 @@ private: // メンバ変数
 
 	//3Dモデル
 	Model* model_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 	//音声再生ハンドル
 	uint32_t voiceHandle_ = 0;
@@ -76,7 +79,10 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0;
 	uint32_t eneTextureHandle_ = 0;
 	
-
+	//  object
+	
+	// 天球
+	std::unique_ptr<Skydome> skydome_;
 	// キャラ
 	Player* player_=nullptr;
 	Enemy* enemy_=nullptr;
