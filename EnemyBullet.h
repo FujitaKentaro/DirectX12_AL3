@@ -26,6 +26,7 @@ class EnemyBullet {
 
   public:
 	bool IsDead() const { return isDead_; }
+	float r = 10;
 
   public:
 	/// <summary>
@@ -42,4 +43,14 @@ class EnemyBullet {
 	/// 描画
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// 衝突を検知したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
+
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	Vector3 GetWorldPosition();
 };

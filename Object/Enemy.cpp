@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Player.h"
 
 /// <summary>
 /// 初期化
@@ -17,7 +18,7 @@ void Enemy::Initialize(Model* model) {
 
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_.z = 10.0f;
+	worldTransform_.translation_.z = 100.0f;
 	worldTransform_.translation_.x = 10.0f;
 
 	//弾更新
@@ -45,7 +46,7 @@ void Enemy::Update() {
 	default:
 		worldTransform_.translation_.z += -0.05f;
 		if (worldTransform_.translation_.z < 0.0f) {
-			phase_ = Phase::Leave;
+			//phase_ = Phase::Leave;
 		}
 
 		fireTimer_--;
@@ -169,4 +170,11 @@ Vector3 Enemy::GetWorldPosition() {
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+/// <summary>
+/// 衝突を検知したら呼び出されるコールバック関数
+/// </summary>
+void Enemy::OnCollision() {
+
 }

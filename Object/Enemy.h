@@ -9,7 +9,6 @@
 #include <list>
 #include <memory>
 
-#include "Player.h"
 // 自機クラスの前方宣言
 class Player;
 
@@ -42,9 +41,13 @@ class Enemy {
 	Phase phase_ = Phase::None;
 	// 発射タイマー
 	int32_t fireTimer_ = 0;
+
   public:
 	// 発射間隔
 	static const int kFireInterval = 60;
+	// 弾リストを取得
+	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets_() { return bullets_; }
+	float r = 2;
 
   public:
 	void Initialize(Model* model);
@@ -71,4 +74,9 @@ class Enemy {
 	/// ワールド座標を取得
 	/// </summary>
 	Vector3 GetWorldPosition();
+
+	/// <summary>
+	/// 衝突を検知したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
 };

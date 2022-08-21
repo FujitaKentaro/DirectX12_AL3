@@ -5,11 +5,10 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include <cassert>
-#include <memory>
 #include <list>
+#include <memory>
 
 #include "PlayerBullet.h"
-
 
 /// <summary>
 /// 自キャラ
@@ -26,18 +25,17 @@ class Player {
 	// input
 	Input* input_ = nullptr;
 	// debugText
-	DebugText* debugText_= nullptr;
+	DebugText* debugText_ = nullptr;
 
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
-	
+  public:
+	float r = 10;
+	// 弾リストを取得
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets_() { return bullets_; }
 
-public:
-
-	////パーツID
- 
-public:
+  public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -66,14 +64,19 @@ public:
 	/// 行列の計算
 	/// </summary>
 	void MatUpdate(WorldTransform& worldTransfom);
-	
+
 	/// <summary>
 	/// ワールド座標を取得
-	/// </summary>	
+	/// </summary>
 	Vector3 GetWorldPosition();
 
 	/// <summary>
 	/// 攻撃
 	/// </summary>
 	void Attack();
+
+	/// <summary>
+	/// 衝突を検知したら呼び出されるコールバック関数
+	/// </summary>
+	void OnCollision();
 };

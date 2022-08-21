@@ -91,15 +91,15 @@ void Player::Move() {
 	// 平行移動
 	{ // X方向
 		if (input_->PushKey(DIK_D)) {
-			move.x = 0.1;
+			move.x = 0.1f;
 		} else if (input_->PushKey(DIK_A)) {
-			move.x = -0.1;
+			move.x = -0.1f;
 		}
 		// Y方向
 		if (input_->PushKey(DIK_W)) {
-			move.y = 0.1;
+			move.y = 0.1f;
 		} else if (input_->PushKey(DIK_S)) {
-			move.y = -0.1;
+			move.y = -0.1f;
 		}
 	}
 
@@ -185,4 +185,11 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+/// <summary>
+/// 衝突を検知したら呼び出されるコールバック関数
+/// </summary>
+void Player::OnCollision() {
+
 }

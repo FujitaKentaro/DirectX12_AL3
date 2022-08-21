@@ -50,3 +50,25 @@ void PlayerBullet::Update() {
 void PlayerBullet::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
+
+/// <summary>
+/// 衝突を検知したら呼び出されるコールバック関数
+/// </summary>
+void PlayerBullet::OnCollision() {
+	// デスデスデース	
+		isDead_ = true;	
+}
+
+/// <summary>
+/// ワールド座標を取得
+/// </summary>
+Vector3 PlayerBullet::GetWorldPosition() {
+	//
+	Vector3 worldPos;
+	//
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
