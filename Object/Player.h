@@ -30,10 +30,14 @@ class Player {
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
+	WorldTransform cameraWorldTransform_;
+
   public:
-	float r = 10;
+	float r = 2;
 	// 弾リストを取得
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets_() { return bullets_; }
+	// オブジェクトの親設定
+	void SetParent(WorldTransform* worldTransform) { worldTransform_.parent_ = worldTransform; };
 
   public:
 	/// <summary>

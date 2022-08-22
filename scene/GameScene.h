@@ -15,6 +15,7 @@
 #include"Player.h"
 #include "Enemy.h"
 #include "Skydome.h"
+#include "RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -80,6 +81,7 @@ private: // メンバ変数
 	uint32_t eneTextureHandle_ = 0;
 	
 	//  object
+	std::unique_ptr<RailCamera> railCamera_;
 	
 	// 天球
 	std::unique_ptr<Skydome> skydome_;

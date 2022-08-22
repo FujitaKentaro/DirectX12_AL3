@@ -46,7 +46,7 @@ void Enemy::Update() {
 	default:
 		worldTransform_.translation_.z += -0.05f;
 		if (worldTransform_.translation_.z < 0.0f) {
-			//phase_ = Phase::Leave;
+			phase_ = Phase::Leave;
 		}
 
 		fireTimer_--;

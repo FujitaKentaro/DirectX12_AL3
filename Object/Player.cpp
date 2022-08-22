@@ -6,11 +6,15 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
 	model_ = model;
 	textureHandle_ = textureHandle;
-
+	// worldTransform_.parent_ = &cameraWorldTransform_;
+	Vector3 move(0, 0, 20);
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
-
+	worldTransform_.translation_ = move;
+	worldTransform_.matWorld_ = MathUtility::Matrix4Translation(
+	  worldTransform_.translation_.x, worldTransform_.translation_.y,
+	  worldTransform_.translation_.z);
 	worldTransform_.Initialize();
 }
 
@@ -48,6 +52,10 @@ void Player::Update() {
 	  "player : x,%f  y,%f z,%f", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
 	  worldTransform_.rotation_.z);
 
+	// debugText_->SetPos(10, 230);
+	// debugText_->Printf(
+	//   "親 : x,%f  y,%f z,%f", worldTransform_.parent_->matWorld_.m[3][0],
+	//   worldTransform_.parent_->matWorld_.m[3][1], worldTransform_.parent_->matWorld_.m[3][3]);
 #pragma endregion
 }
 
@@ -100,6 +108,12 @@ void Player::Move() {
 			move.y = 0.1f;
 		} else if (input_->PushKey(DIK_S)) {
 			move.y = -0.1f;
+		}
+		// Z方向
+		if (input_->PushKey(DIK_3)) {
+			move.z = 0.1f;
+		} else if (input_->PushKey(DIK_4)) {
+			move.z = -0.1f;
 		}
 	}
 
@@ -162,11 +176,21 @@ void Player::Attack() {
 		Vector3 velocity(0, 0, kBulletSpeed);
 
 		// 速度ベクトルを自機の向きに合わせて回転させる
+		velocity = Affin::VecMat(velocity, worldTransform_.parent_->matWorld_);
 		velocity = Affin::VecMat(velocity, worldTransform_.matWorld_);
 
 		// 弾を生成し、初期化
+		Vector3 playerRot, playerPos;
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+		// 平行
+		playerPos = worldTransform_.parent_->translation_;
+		playerPos += worldTransform_.translation_;
+		// 回転
+		playerRot = worldTransform_.parent_->rotation_;
+		playerRot += worldTransform_.rotation_;
+
+		// 弾の初期化
+		newBullet->Initialize(model_, GetWorldPosition(), velocity);
 
 		// 弾を登録する
 		bullets_.push_back(std::move(newBullet));
@@ -177,7 +201,7 @@ void Player::Attack() {
 /// ワールド座標を取得
 /// </summary>
 Vector3 Player::GetWorldPosition() {
-	// 
+	//
 	Vector3 worldPos;
 	//
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
@@ -190,6 +214,4 @@ Vector3 Player::GetWorldPosition() {
 /// <summary>
 /// 衝突を検知したら呼び出されるコールバック関数
 /// </summary>
-void Player::OnCollision() {
-
-}
+void Player::OnCollision() {}

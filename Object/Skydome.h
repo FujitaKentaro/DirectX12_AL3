@@ -14,7 +14,9 @@ class Skydome {
 
 	//ƒ‚ƒfƒ‹
 	Model* model_ = nullptr;
-	Vector3 scale = {100.0f, 100.0f, 100.0f};
+	const float size = 100.0f;
+	Vector3 scale = {size,size,size};
+	Vector3 trans = {0.0f, 0.0f, 0.0f};
   public:
 	/// <summary>
 	/// ‰Šú‰»

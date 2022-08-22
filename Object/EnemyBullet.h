@@ -26,7 +26,7 @@ class EnemyBullet {
 
   public:
 	bool IsDead() const { return isDead_; }
-	float r = 10;
+	float r = 2;
 
   public:
 	/// <summary>

@@ -54,14 +54,20 @@ void GameScene::Initialize() {
 	//自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
 
-	//自キャラの生成
+	//敵キャラの生成
 	enemy_ = new Enemy();
-	//自キャラの初期化
+	//敵キャラの初期化
 	enemy_->Initialize(model_);
 	enemy_->SetPlayer(player_);
 	// 天球の生成
 	skydome_ = std::make_unique<Skydome>();
 	skydome_.get()->Initialize(modelSkydome_);
+	Vector3 rad(0, 0, 0);
+	Vector3 pos(0, 0, -50);
+	// レールcamera の生成
+	railCamera_ = std::make_unique<RailCamera>();
+	railCamera_.get()->Initialize(pos, rad);
+	player_->SetParent(railCamera_.get()->GetWorldTransform());
 }
 
 void GameScene::Update() {
@@ -78,23 +84,23 @@ void GameScene::Update() {
 #endif // _DEBUG
 
 	// カメラの処理
-	if (isDebugcameraActive_ == true) {
-		//デバッグカメラの更新
+	if (isDebugcameraActive_){
 		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-
-		viewProjection_.TransferMatrix();
-	} else {
-		viewProjection_.UpdateMatrix();
-		viewProjection_.TransferMatrix();
+		viewProjection_ = debugCamera_->GetViewProjection();
+	}else{
+		viewProjection_.Initialize();
 	}
+	
 
-	// 自キャラ更新
+	
+	// キャラ更新
 	player_->Update();
 	enemy_->Update();
+
 	CheckAllCollisions();
 	skydome_.get()->Update();
+
+	railCamera_.get()->Update();
 }
 
 void GameScene::Draw() {
@@ -123,7 +129,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	// model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
+	//model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 	skydome_.get()->Draw(viewProjection_);
 	//自キャラ描画
 	player_->Draw(viewProjection_);
@@ -151,6 +157,8 @@ void GameScene::Draw() {
 
 #pragma endregion
 }
+
+
 /// <summary>
 /// 衝突判定と応答
 /// </summary>
@@ -173,8 +181,7 @@ void GameScene::CheckAllCollisions() {
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
 		//敵弾の座標
 		posB = bullet.get()->GetWorldPosition();
-		float a = std::pow(posB.x - posA.x, 2.0f) +
-				  std::pow(posB.y - posA.y, 2.0f) +
+		float a = std::pow(posB.x - posA.x, 2.0f) + std::pow(posB.y - posA.y, 2.0f) +
 		          std::pow(posB.z - posA.z, 2.0f);
 		float lenR = std::pow(bullet.get()->r + player_->r, 2.0);
 		// 球と球の交差判定

@@ -104,8 +104,9 @@
     <ClCompile Include="Object\EnemyBullet.cpp" />
     <ClCompile Include="Object\Player.cpp" />
     <ClCompile Include="Object\PlayerBullet.cpp" />
+    <ClCompile Include="Object\Skydome.cpp" />
+    <ClCompile Include="RailCamera.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
-    <ClCompile Include="Skydome.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\DebugText.h" />
@@ -139,8 +140,9 @@
     <ClInclude Include="Object\EnemyBullet.h" />
     <ClInclude Include="Object\Player.h" />
     <ClInclude Include="Object\PlayerBullet.h" />
+    <ClInclude Include="Object\Skydome.h" />
+    <ClInclude Include="RailCamera.h" />
     <ClInclude Include="scene\GameScene.h" />
-    <ClInclude Include="Skydome.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Obj.hlsli" />

@@ -26,7 +26,7 @@ class PlayerBullet {
 	bool isDead_ = false;
 
   public:
-	float r = 10;
+	float r = 2;
 	bool IsDead() const { return isDead_; }
 
   public:
