@@ -11,6 +11,7 @@
 
 // 自機クラスの前方宣言
 class Player;
+class GameScene;
 
 enum class Phase {
 	None,     // 停止
@@ -35,6 +36,11 @@ class Enemy {
 	// 自キャラ
 	Player* player_ = nullptr;
 
+	GameScene* gameScene_ = nullptr;
+
+	//デスフラグ
+	bool isDead_ = false;
+
 	//弾
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 
@@ -50,7 +56,7 @@ class Enemy {
 	float r = 2;
 
   public:
-	void Initialize(Model* model);
+	void Initialize(Model* model,Vector3 trans);
 	void Update();
 	void Draw(ViewProjection viewProjection);
 	void SetPlayer(Player* player);
@@ -79,4 +85,8 @@ class Enemy {
 	/// 衝突を検知したら呼び出されるコールバック関数
 	/// </summary>
 	void OnCollision();
+
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
+	bool IsDead() const { return isDead_; }
 };

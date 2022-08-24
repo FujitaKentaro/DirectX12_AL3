@@ -18,7 +18,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	// 引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
 
-	worldTransform_.TransferMatrix();
+	//worldTransform_.TransferMatrix();
 
 	// 引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;

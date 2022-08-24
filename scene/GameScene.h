@@ -9,13 +9,13 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 //#include "WorldTransform.h"
-#include "DebugCamera.h"
-#include <DirectXMath.h>
-#include <memory>
-#include"Player.h"
-#include "Enemy.h"
-#include "Skydome.h"
-#include "RailCamera.h"
+#include"DebugCamera.h"
+#include "PLayer.h"
+#include"Enemy.h"
+#include"Skydome.h"
+#include"RailCamera.h"
+#include<sstream>
+
 
 /// <summary>
 /// ゲームシーン
@@ -36,7 +36,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize(GameScene* gameScene);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -52,6 +52,26 @@ public: // メンバ関数
 	/// 衝突判定と応答
 	/// </summary>
 	void CheckAllCollisions();
+
+	/// <summary>
+	/// 弾発射
+	/// </summary>
+	void Fire(Vector3 trans);
+
+	/// <summary>
+	/// 敵弾
+	/// </summary>
+	void AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet);
+
+	/// <summary>
+	/// 敵発生データの読み込み
+	/// </summary>
+	void LoadEnemyPopData();
+
+	/// <summary>
+	/// 敵発生コマンドの更新
+	/// </summary>
+	void UpdateEnemyPopCommands();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -81,14 +101,20 @@ private: // メンバ変数
 	uint32_t eneTextureHandle_ = 0;
 	
 	//  object
-	std::unique_ptr<RailCamera> railCamera_;
-	
+	std::unique_ptr<RailCamera> railCamera_;	
 	// 天球
 	std::unique_ptr<Skydome> skydome_;
+
 	// キャラ
 	Player* player_=nullptr;
-	Enemy* enemy_=nullptr;
-	
+
+	// 敵
+	std::list<std::unique_ptr<Enemy>> enemy_;
+	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+	GameScene* gameScene_ = nullptr;
+	std::stringstream enemyPopCommands;
+	bool enemyPop = true;
+	float enemyPopTime = true;	
 
 	//ワールドトランスフォーム
 	//WorldTransform worldTransform_;

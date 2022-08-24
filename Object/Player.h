@@ -34,11 +34,7 @@ class Player {
 
   public:
 	float r = 2;
-	// 弾リストを取得
-	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets_() { return bullets_; }
-	// オブジェクトの親設定
-	void SetParent(WorldTransform* worldTransform) { worldTransform_.parent_ = worldTransform; };
-
+	
   public:
 	/// <summary>
 	/// 初期化
@@ -83,4 +79,14 @@ class Player {
 	/// 衝突を検知したら呼び出されるコールバック関数
 	/// </summary>
 	void OnCollision();
+
+	/// <summary>
+	/// 弾の取得
+	/// </summary>
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
+
+	/// <summary>
+	/// 親オブジェクトの設定
+	/// </summary>
+	void SetParent(WorldTransform* worldTransform) { worldTransform_.parent_ = worldTransform; };
 };

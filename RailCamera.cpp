@@ -1,4 +1,5 @@
 #include "RailCamera.h"
+#include <cassert>
 
 /// <summary>
 /// 初期化
@@ -32,30 +33,17 @@ void RailCamera::Update() {
 	viewProjection_.eye = worldTransform_.translation_;
 	// ワールド前方ベクトル
 	Vector3 forward(0, 0, 1);
-	forward = MathUtility::Vector3Transform(forward, worldTransform_.matWorld_);
+	forward =Affin::VecMat(forward, worldTransform_.matWorld_);
 	// 視点から前方に適当な距離進んだ位置が注視点
 	forward += viewProjection_.eye;
 	viewProjection_.target = forward;
 	// ワールド上方ベクトル
 	Vector3 up(0, 1, 0);
 	// レールカメラの回転を反映（レールカメラの上方ベクトル）
-	viewProjection_.up = MathUtility::Vector3Transform(up, worldTransform_.matWorld_);
+	viewProjection_.up = Affin::VecMat(up, worldTransform_.matWorld_);
 	// ビュープロジェクションの更新
 	viewProjection_.UpdateMatrix();
-
-	debugText_->SetPos(30, 90);
-	debugText_->Printf(
-	  "eye : x,%f  y,%f z,%f", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z);
-	debugText_->SetPos(10, 110);
-	debugText_->Printf(
-	  "player : x,%f  y,%f z,%f", worldTransform_.translation_.x, worldTransform_.translation_.y,
-	  worldTransform_.translation_.z);
-	debugText_->SetPos(10, 130);
-	debugText_->Printf(
-	  "player : x,%f  y,%f z,%f", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
-	  worldTransform_.rotation_.z);
-	debugText_->SetPos(10, 150);
-	debugText_->Printf("farZ : %f", viewProjection_.farZ);
+	
 }
 
 /// <summary>

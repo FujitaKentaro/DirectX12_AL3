@@ -4,7 +4,7 @@
 /// <summary>
 /// 初期化
 /// </summary>
-void Enemy::Initialize(Model* model) {
+void Enemy::Initialize(Model* model,Vector3 trans) {
 	// NULLポインタチェック
 	assert(model);
 

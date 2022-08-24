@@ -8,14 +8,16 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 	// worldTransform_.parent_ = &cameraWorldTransform_;
 	Vector3 move(0, 0, 20);
+
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
+
+	worldTransform_.Initialize();
 	worldTransform_.translation_ = move;
 	worldTransform_.matWorld_ = MathUtility::Matrix4Translation(
 	  worldTransform_.translation_.x, worldTransform_.translation_.y,
 	  worldTransform_.translation_.z);
-	worldTransform_.Initialize();
 }
 
 /// <summary>
