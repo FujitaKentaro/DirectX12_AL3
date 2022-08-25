@@ -16,7 +16,6 @@
     <ProjectGuid>{21b76583-db5e-4750-b00c-fbcf46abce48}</ProjectGuid>
     <RootNamespace>DirectXGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>DirectXGameRE</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -46,7 +45,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\DirectXTex\include;$(ProjectDir)lib\3d;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)lib\DirectXTex\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\KamataEngineLib\$(Configuration);$(ProjectDir)lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -60,7 +59,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Object;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -82,6 +82,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>MinSpace</Optimization>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -99,13 +100,6 @@
     <ClCompile Include="base\TextureManager.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\Affin.cpp" />
-    <ClCompile Include="Object\Enemy.cpp" />
-    <ClCompile Include="Object\EnemyBullet.cpp" />
-    <ClCompile Include="Object\Player.cpp" />
-    <ClCompile Include="Object\PlayerBullet.cpp" />
-    <ClCompile Include="Object\Skydome.cpp" />
-    <ClCompile Include="RailCamera.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,18 +124,11 @@
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="input\Input.h" />
-    <ClInclude Include="math\Affin.h" />
     <ClInclude Include="math\MathUtility.h" />
     <ClInclude Include="math\Matrix4.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
-    <ClInclude Include="Object\Enemy.h" />
-    <ClInclude Include="Object\EnemyBullet.h" />
-    <ClInclude Include="Object\Player.h" />
-    <ClInclude Include="Object\PlayerBullet.h" />
-    <ClInclude Include="Object\Skydome.h" />
-    <ClInclude Include="RailCamera.h" />
     <ClInclude Include="scene\GameScene.h" />
   </ItemGroup>
   <ItemGroup>
