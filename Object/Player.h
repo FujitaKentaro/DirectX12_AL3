@@ -102,4 +102,12 @@ class Player {
 	/// UI描画
 	/// </summary>
 	void DrawUI();
+
+	/// <summary>
+	/// 自機のワールド座標から3Dレティクルのワールド座標を計算
+	/// </summary>
+	void WorldReticle();
+	
+	// 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
+	void Reticle(ViewProjection viewprojection);
 };
