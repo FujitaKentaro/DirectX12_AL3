@@ -56,10 +56,9 @@ void GameScene::Initialize(GameScene* gameScene) {
 void GameScene::Update() {
 
 #ifdef _DEBUG
-	  if (input_->TriggerKey(DIK_P) && isDebugcameraActive_ == false) {
+	if (input_->TriggerKey(DIK_P) && isDebugcameraActive_ == false) {
 		isDebugcameraActive_ = true;
-	}
-	else if (input_->TriggerKey(DIK_P) && isDebugcameraActive_ == true) {
+	} else if (input_->TriggerKey(DIK_P) && isDebugcameraActive_ == true) {
 		isDebugcameraActive_ = false;
 	}
 
@@ -78,13 +77,12 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	}
 
-
 	//デスフラグの立った弾を削除
 	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
 	//デスフラグの立った弾を削除
 	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	//自キャラの更新
-	player_->Update();
+	player_->Update(viewProjection_);
 
 	UpdateEnemyPopCommands();
 
@@ -102,7 +100,6 @@ void GameScene::Update() {
 	CheckAllCollisions();
 
 	railCamera_->Update();
-
 }
 
 void GameScene::Draw() {
@@ -155,6 +152,8 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
+	player_->DrawUI();
+
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
 	//
@@ -163,6 +162,7 @@ void GameScene::Draw() {
 
 #pragma endregion
 }
+
 void GameScene::CheckAllCollisions() {
 	//判定対象AとBの座標
 	Vector3 posA, posB;
@@ -171,77 +171,74 @@ void GameScene::CheckAllCollisions() {
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
 
 #pragma region 自キャラと敵弾の当たり判定
-	//自キャラの座標
-	posA = player_->GetWorldPosition();
+	{
+		// 自キャラの座標
+		posA = player_->GetWorldPosition();
 
-	//自キャラと敵弾全ての当たり判定
-	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
-		//敵弾の座標
-		posB = bullet->GetWorldPosition();
+		// 自キャラと敵弾すべての当たり判定
+		for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 
-		const float AR = 1;
-		const float BR = 1;
+			//敵弾の座標
+			posB = bullet.get()->GetWorldPosition();
+			float a = std::pow(posB.x - posA.x, 2.0f) + std::pow(posB.y - posA.y, 2.0f) +
+			          std::pow(posB.z - posA.z, 2.0f);
+			float lenR = std::pow(bullet.get()->r + player_->r, 2.0);
 
-		float A = pow((posB.x - posA.x), 2) + pow((posB.y - posA.y), 2) + pow((posB.z - posA.z), 2);
-		float B = pow((AR + BR), 2);
-
-		if (A <= B) {
-			//自キャラの衝突時コールバックを呼び出す
-			player_->OnCollision();
-			//敵弾の衝突時コールバックを呼び出す
-			bullet->OnCollision();
-		}
-	}
-#pragma endregion
-
-#pragma region 自弾と敵キャラの当たり判定
-	//自キャラと敵弾全ての当たり判定
-	for (const std::unique_ptr<Enemy>& enemy : enemy_) {
-		posA = enemy->GetWorldPosition();
-		//自弾と敵キャラ全ての当たり判定
-		for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
-			//自弾の座標
-			posB = bullet->GetWorldPosition();
-
-			const float AR = 1;
-			const float BR = 1;
-
-			float A =
-			  pow((posB.x - posA.x), 2) + pow((posB.y - posA.y), 2) + pow((posB.z - posA.z), 2);
-			float B = pow((AR + BR), 2);
-
-			if (A <= B) {
-				//自キャラの衝突時コールバックを呼び出す
-				enemy->OnCollision();
-				//敵弾の衝突時コールバックを呼び出す
+			// 球と球の交差判定
+			if (a <= lenR) {
+				// 自キャラの衝突時コールバックを呼び出す
+				player_->OnCollision();
+				// 敵弾の衝突時コールバックを呼び出す
 				bullet->OnCollision();
 			}
 		}
 	}
 #pragma endregion
 
+#pragma region 自弾と敵キャラの当たり判定
+	{
+		for (const std::unique_ptr<Enemy>& enemy : enemy_) {
+			posA = enemy->GetWorldPosition();
+			// 自球と敵すべての当たり判定
+			for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
+				//自弾の座標
+				posB = bullet->GetWorldPosition();
+				float a = std::pow(posB.x - posA.x, 2.0f) + std::pow(posB.y - posA.y, 2.0f) +
+				          std::pow(posB.z - posA.z, 2.0f);
+				float lenR = std::pow((bullet.get()->r + enemy->r), 2.0);
+				// 球と球の交差判定
+				if (a <= lenR) {
+					// キャラの衝突時コールバックを呼び出す
+					enemy->OnCollision();
+					// 弾の衝突時コールバックを呼び出す
+					bullet->OnCollision();
+				}
+			}
+		}
+	}
+#pragma endregion
 #pragma region 自弾と敵弾の当たり判定
-	//自キャラと敵弾全ての当たり判定
-	for (const std::unique_ptr<EnemyBullet>& enemybullet : enemyBullets_) {
-		//自弾と敵キャラ全ての当たり判定
-		for (const std::unique_ptr<PlayerBullet>& playerbullet : playerBullets) {
-			//自弾の座標
-			posA = playerbullet->GetWorldPosition();
-			//自弾の座標
-			posB = enemybullet->GetWorldPosition();
+	{
+		// 敵弾
+		for (const std::unique_ptr<PlayerBullet>& pBullet : playerBullets) {
 
-			const float AR = 1;
-			const float BR = 1;
+			posA = pBullet->GetWorldPosition();
+			// 自球と敵弾すべての当たり判定
+			for (const std::unique_ptr<EnemyBullet>& eBullet : enemyBullets_) {
+				//敵弾の座標
+				posB = eBullet->GetWorldPosition();
 
-			float A =
-			  pow((posB.x - posA.x), 2) + pow((posB.y - posA.y), 2) + pow((posB.z - posA.z), 2);
-			float B = pow((AR + BR), 2);
+				float a = std::pow(posB.x - posA.x, 2.0f) + std::pow(posB.y - posA.y, 2.0f) +
+				          std::pow(posB.z - posA.z, 2.0f);
+				float lenR = std::pow((eBullet.get()->r + pBullet.get()->r), 2.0);
 
-			if (A <= B) {
-				//自キャラの衝突時コールバックを呼び出す
-				enemybullet->OnCollision();
-				//敵弾の衝突時コールバックを呼び出す
-				playerbullet->OnCollision();
+				// 球と球の交差判定
+				if (a <= lenR) {
+					// 自キャラの衝突時コールバックを呼び出す
+					pBullet->OnCollision();
+					// 敵弾の衝突時コールバックを呼び出す
+					eBullet->OnCollision();
+				}
 			}
 		}
 	}
@@ -251,6 +248,7 @@ void GameScene::CheckAllCollisions() {
 void GameScene::AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet) {
 	enemyBullets_.push_back(std::move(enemyBullet));
 }
+
 void GameScene::Fire(Vector3 trans) {
 	assert(player_);
 
@@ -260,6 +258,7 @@ void GameScene::Fire(Vector3 trans) {
 	enemy->SetGameScene(gameScene_);
 	enemy_.push_back(std::move(enemy));
 }
+
 void GameScene::LoadEnemyPopData() {
 	//ファイルを開く
 	std::ifstream file;
@@ -272,6 +271,7 @@ void GameScene::LoadEnemyPopData() {
 	//ファイルを閉じる
 	file.close();
 }
+
 void GameScene::UpdateEnemyPopCommands() {
 
 	//待機処理

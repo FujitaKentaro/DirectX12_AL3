@@ -97,8 +97,8 @@ private: // メンバ変数
 	uint32_t soundDataHandle_ = 0;
 
 	//テクスチャハンドル
-	uint32_t textureHandle_ = 0;
-	uint32_t eneTextureHandle_ = 0;
+	uint32_t textureHandle_ = 0u;
+	uint32_t eneTextureHandle_ = 0u;
 	
 	//  object
 	std::unique_ptr<RailCamera> railCamera_;	

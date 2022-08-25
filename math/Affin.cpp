@@ -180,14 +180,51 @@ Matrix4 Affin::matWorld(Vector3 move, Vector3 rotate, Vector3 scale) {
 ///	ベクトルと行列の掛け算
 /// </summary>
 Vector3 Affin::VecMat(Vector3 vec, Matrix4 mat) {
-	
+
 	float x = vec.x * mat.m[0][0] + vec.y * mat.m[1][0] + vec.z * mat.m[2][0] + 0 * mat.m[3][0];
-	
+
 	float y = vec.x * mat.m[0][1] + vec.y * mat.m[1][1] + vec.z * mat.m[2][1] + 0 * mat.m[3][1];
-	
+
 	float z = vec.x * mat.m[0][2] + vec.y * mat.m[1][2] + vec.z * mat.m[2][2] + 0 * mat.m[3][2];
-	
+
 	Vector3 re = {x, y, z};
-	
+
 	return re;
+}
+
+/// <summary>
+///	ワールド座標取得
+/// </summary>
+Vector3 Affin::GetWorldTrans(Matrix4 matrix) {
+	Vector3 mat;
+
+	mat.x = matrix.m[3][0];
+	mat.y = matrix.m[3][1];
+	mat.z = matrix.m[3][2];
+
+	return mat;
+}
+
+/// <summary>
+///	W 除算
+/// </summary>
+Vector3 Affin::wDivision(Vector3 vector, Matrix4 matrix) {
+	Vector3 result;
+	float w;
+
+	w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] +
+	    matrix.m[3][3];
+
+	result = {
+	  (vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] +
+	   matrix.m[3][0]) /
+	    w,
+	  (vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] +
+	   matrix.m[3][1]) /
+	    w,
+	  (vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] +
+	   matrix.m[3][2]) /
+	    w};
+
+	return result;
 }

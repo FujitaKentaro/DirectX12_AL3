@@ -21,16 +21,24 @@ class Player {
 	Model* model_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+	//レティクル用テクスチャ取得
+	uint32_t textureReticle = TextureManager::Load("reticle2D.png");
 
 	// input
 	Input* input_ = nullptr;
 	// debugText
 	DebugText* debugText_ = nullptr;
 
-	//弾
+	// 弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
+	// カメラ座標用
 	WorldTransform cameraWorldTransform_;
+
+	// 3Dレティクル用ワールドトランスフォーム
+	WorldTransform worldTransform3DReticle_;
+	// 2Dレティクル用スプライト
+	std::unique_ptr<Sprite> sprite2DReticle_;
 
   public:
 	float r = 2;
@@ -44,7 +52,7 @@ class Player {
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(ViewProjection viewprojection);
 
 	/// <summary>
 	/// 描画
@@ -89,4 +97,9 @@ class Player {
 	/// 親オブジェクトの設定
 	/// </summary>
 	void SetParent(WorldTransform* worldTransform) { worldTransform_.parent_ = worldTransform; };
+
+	/// <summary>
+	/// UI描画
+	/// </summary>
+	void DrawUI();
 };

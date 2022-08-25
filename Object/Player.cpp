@@ -5,7 +5,16 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);
 
 	model_ = model;
-	textureHandle_ = textureHandle;
+	textureHandle_ = TextureManager::Load("mario.png");
+	
+
+	// 3Dレティクルのワールドトランスフォームの初期化
+	worldTransform3DReticle_.Initialize();
+
+	//スプライト生成
+	sprite2DReticle_.reset(
+	  Sprite::Create(textureReticle, Vector2{640, 360}, Vector4{1, 1, 1, 1}, Vector2(0.5, 0.5)));
+
 	// worldTransform_.parent_ = &cameraWorldTransform_;
 	Vector3 move(0, 0, 20);
 
@@ -23,7 +32,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 /// <summary>
 /// 更新
 /// </summary>
-void Player::Update() {
+void Player::Update(ViewProjection viewprojection) {
 
 	// デスフラグの立った弾を削除
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
@@ -43,6 +52,49 @@ void Player::Update() {
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
+	}
+
+	//自機のワールド座標から3Dレティクルのワールド座標を計算
+	{
+		//自機から3Dレティクルへの距離
+		const float kDistancePlayerTo3DReticle = 50.0f;
+		//自機から3Dレティクルへのオフセット(Z+向き)
+		Vector3 offset = {0, 0, 1.0f};
+		//自機のワールド行列の回転を反映
+		offset = Affin::VecMat(offset, worldTransform_.matWorld_);
+		//ベクトルの長さを整える
+		float len = sqrt(offset.x * offset.x + offset.y * offset.y + offset.z * offset.z);
+		if (len != 0) {
+			offset /= len;
+		}
+		offset *= kDistancePlayerTo3DReticle;
+		worldTransform3DReticle_.translation_ = offset;
+		worldTransform3DReticle_.matWorld_ = Affin::matTrans(worldTransform_.translation_);
+		worldTransform3DReticle_.TransferMatrix();
+	}
+	// 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
+	{
+		Vector3 positionReticle = Affin::GetWorldTrans(worldTransform3DReticle_.matWorld_);
+
+		//ビューポート行列
+		Matrix4 matViewport = {
+		  640, 0, 0, 0, 0, -360, 0, 0, 0, 0, 1, 0, 640, 360, 0, 1,
+		};
+
+		//ビューポート行列
+		Matrix4 matViewProjectionViewport;
+		matViewProjectionViewport = viewprojection.matView;
+		matViewProjectionViewport *= viewprojection.matProjection;
+		matViewProjectionViewport *= matViewport;
+
+		//ワールド→スクリーン座標変換(ここで3Dから2Dになる)
+		positionReticle = Affin::wDivision(positionReticle, matViewProjectionViewport);
+
+		//スプライトのレティクルに座標設定
+		sprite2DReticle_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
+
+		debugText_->SetPos(100, 100);
+		debugText_->Printf("X:%f,Y:%f", positionReticle.x, positionReticle.y);
 	}
 
 	debugText_->SetPos(10, 10);
@@ -68,6 +120,7 @@ void Player::Draw(ViewProjection viewProjection) {
 
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
+	//model_->Draw(worldTransform3DReticle_, viewProjection, textureHandle_);
 	//弾描画
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection);
@@ -83,9 +136,8 @@ void Player::MatUpdate(WorldTransform& worldTransform_) {
 	  worldTransform_.translation_, worldTransform_.rotation_, worldTransform_.scale_);
 
 	// 親の行列を掛け算代入
-	if (worldTransform_.parent_ != nullptr) {
-		worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
-	}
+
+	worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
 
 	// 行列の転送
 	worldTransform_.TransferMatrix();
@@ -191,6 +243,20 @@ void Player::Attack() {
 		playerRot = worldTransform_.parent_->rotation_;
 		playerRot += worldTransform_.rotation_;
 
+		Vector3 plPos, retPos;
+
+		retPos = Affin::GetWorldTrans(worldTransform3DReticle_.matWorld_);
+		plPos = Affin::GetWorldTrans(worldTransform_.matWorld_);
+
+		velocity = MathUtility::operator-(retPos, plPos);
+
+		float len =
+		  sqrt(velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z);
+		if (len != 0) {
+			velocity /= len;
+		}
+		velocity *= kBulletSpeed;
+
 		// 弾の初期化
 		newBullet->Initialize(model_, GetWorldPosition(), velocity);
 
@@ -217,3 +283,8 @@ Vector3 Player::GetWorldPosition() {
 /// 衝突を検知したら呼び出されるコールバック関数
 /// </summary>
 void Player::OnCollision() {}
+
+/// <summary>
+/// UI描画
+/// </summary>
+void Player::DrawUI() { sprite2DReticle_->Draw(); }
