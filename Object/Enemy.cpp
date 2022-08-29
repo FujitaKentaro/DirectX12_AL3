@@ -18,8 +18,8 @@ void Enemy::Initialize(Model* model,Vector3 trans) {
 
 	worldTransform_.Initialize();
 
-	worldTransform_.translation_.z = 100.0f;
-	worldTransform_.translation_.x = 10.0f;
+	worldTransform_.translation_ = trans;
+	
 
 	//íeçXêV
 	//	Fire();

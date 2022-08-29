@@ -5,6 +5,8 @@
 #include "Affin.h"
 #include "Input.h"
 
+class Player;
+
 /// <summary>
 /// レールカメラ
 /// </summary>
@@ -27,7 +29,7 @@ class RailCamera {
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(Player* player);
 
 	/// <summary>
 	/// 移動

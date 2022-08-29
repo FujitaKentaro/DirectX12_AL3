@@ -90,6 +90,7 @@ class GameScene {
 	// 3Dモデル
 	Model* model_ = nullptr;
 	Model* modelSkydome_ = nullptr;
+	Model* modelBullet_ = nullptr;
 
 	//音声再生ハンドル
 	uint32_t voiceHandle_ = 0;
@@ -127,6 +128,9 @@ class GameScene {
 	float viewAngle = 0.0f;
 	//デバックカメラ有効
 	bool isDebugcameraActive_ = false;
+
+	// ステージ
+	int stage = 0;
 
 	/// <summary>
 	/// ゲームシーン用

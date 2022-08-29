@@ -19,6 +19,7 @@ class Player {
 	WorldTransform worldTransform_;
 	//モデル
 	Model* model_ = nullptr;
+	Model* bulletModel_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	//レティクル用テクスチャ取得
@@ -42,7 +43,7 @@ class Player {
 
   public:
 	float r = 2;
-	
+
   public:
 	/// <summary>
 	/// 初期化
@@ -52,7 +53,7 @@ class Player {
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(ViewProjection viewprojection);
+	void Update(ViewProjection viewprojection, Model* model);
 
 	/// <summary>
 	/// 描画
@@ -81,7 +82,7 @@ class Player {
 	/// <summary>
 	/// 攻撃
 	/// </summary>
-	void Attack();
+	void Attack(Model* model);
 
 	/// <summary>
 	/// 衝突を検知したら呼び出されるコールバック関数
@@ -92,6 +93,11 @@ class Player {
 	/// 弾の取得
 	/// </summary>
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
+
+	/// <summary>
+	/// ワールド行列の取得
+	/// </summary>
+	WorldTransform GetWorldTransform() { return worldTransform_; }
 
 	/// <summary>
 	/// 親オブジェクトの設定
@@ -107,7 +113,7 @@ class Player {
 	/// 自機のワールド座標から3Dレティクルのワールド座標を計算
 	/// </summary>
 	void WorldReticle();
-	
+
 	// 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
 	void Reticle(ViewProjection viewprojection);
 };

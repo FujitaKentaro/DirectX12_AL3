@@ -36,17 +36,17 @@ void GameScene::Initialize(GameScene* gameScene) {
 	railCamera_ = std::make_unique<RailCamera>();
 	player_ = new Player();
 	model_ = Model::Create();
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	modelBullet_ = Model::CreateFromOBJ("bullet", true);
 	//自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	railCamera_->Initialize(Vector3{0.0f, 0.0f, -50.0f}, Vector3{0.0f, 0.0f, 0.0f});
+	railCamera_->Initialize(Vector3{0.0f, 0.0f, -120.0f}, Vector3{0.0f, 0.0f, 0.0f});
 
-	player_->SetParent(railCamera_->GetWorldTransform());
-
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	player_->SetParent(railCamera_->GetWorldTransform());	
 
 	skydome_->Initialize(modelSkydome_);
 
@@ -82,7 +82,7 @@ void GameScene::Update() {
 	//デスフラグの立った弾を削除
 	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	//自キャラの更新
-	player_->Update(viewProjection_);
+	player_->Update(viewProjection_,modelBullet_);
 
 	UpdateEnemyPopCommands();
 
@@ -99,7 +99,7 @@ void GameScene::Update() {
 	//衝突判定
 	CheckAllCollisions();
 
-	railCamera_->Update();
+	railCamera_->Update(player_);
 }
 
 void GameScene::Draw() {

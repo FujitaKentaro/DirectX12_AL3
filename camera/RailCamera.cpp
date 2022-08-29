@@ -1,6 +1,8 @@
 #include "RailCamera.h"
 #include <cassert>
 
+#include "Player.h"
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -23,17 +25,17 @@ void RailCamera::Initialize(Vector3 wTrans, Vector3 rad) {
 /// <summary>
 /// 更新
 /// </summary>
-void RailCamera::Update() {
+void RailCamera::Update(Player* player) {
 
 	Move();
 	Rotate();
 	worldTransform_.matWorld_ = Affin::matWorld(
 	  worldTransform_.translation_, worldTransform_.rotation_, worldTransform_.scale_);
-
+	
 	viewProjection_.eye = worldTransform_.translation_;
 	// ワールド前方ベクトル
 	Vector3 forward(0, 0, 1);
-	forward =Affin::VecMat(forward, worldTransform_.matWorld_);
+	forward = Affin::VecMat(forward, worldTransform_.matWorld_);
 	// 視点から前方に適当な距離進んだ位置が注視点
 	forward += viewProjection_.eye;
 	viewProjection_.target = forward;

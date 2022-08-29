@@ -31,8 +31,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 /// <summary>
 /// 更新
 /// </summary>
-void Player::Update(ViewProjection viewProjection) {
-
+void Player::Update(ViewProjection viewProjection, Model* model) {
+	assert(model);
 	// デスフラグの立った弾を削除
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
 
@@ -46,7 +46,7 @@ void Player::Update(ViewProjection viewProjection) {
 	MatUpdate(worldTransform_);
 
 	//キャラ攻撃
-	Attack();
+	Attack(model);
 
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
@@ -159,15 +159,15 @@ void Player::Draw(ViewProjection viewProjection) {
 	}
 }
 
-void Player::MatUpdate(WorldTransform& worldTransform_) {
-
+void Player::MatUpdate(WorldTransform& worldTransform) {
+	
 	// パーツの更新
 
 	// ３移動合成行列を計算
 	worldTransform_.matWorld_ = Affin::matWorld(
 	  worldTransform_.translation_, worldTransform_.rotation_, worldTransform_.scale_);
 
-	// 親の行列を掛け算代入
+	// 親の行列を掛け算代入	
 
 	worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
 
@@ -261,8 +261,8 @@ void Player::Rotate() {
 /// <summary>
 /// 攻撃
 /// </summary>
-void Player::Attack() {
-
+void Player::Attack(Model* model) {
+	bulletModel_ = model;
 	XINPUT_STATE joyState;
 
 	if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
@@ -294,7 +294,7 @@ void Player::Attack() {
 		// 回転
 		playerRot = worldTransform_.parent_->rotation_;
 		playerRot += worldTransform_.rotation_;
-		newBullet->Initialize(model_, GetWorldPosition(), velocity);
+		newBullet->Initialize(bulletModel_, GetWorldPosition(), velocity);
 
 		//弾の登録する
 		bullets_.push_back(std::move(newBullet));
