@@ -11,14 +11,16 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 
 	model_ = model;
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("ddddog.png");
+	// textureHandle_ = TextureManager::Load("ddddog.png");
+	textureHandle_ = TextureManager::Load("zako.png");
 
 	// ワールドトランスフォーム
 	worldTransform_.Initialize();
 	// 引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
+	//worldTransform_.scale_ = {2, 2, 2};
 
-	//worldTransform_.TransferMatrix();
+	// worldTransform_.TransferMatrix();
 
 	// 引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
@@ -47,7 +49,7 @@ void EnemyBullet::Update() {
 /// 描画
 /// </summary>
 void EnemyBullet::Draw(const ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection);
 }
 
 /// <summary>

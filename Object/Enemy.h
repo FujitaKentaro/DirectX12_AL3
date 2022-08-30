@@ -52,12 +52,12 @@ class Enemy {
 	// 発射間隔
 	static const int kFireInterval = 60;
 	// 弾リストを取得
-	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets_() { return bullets_; }
-	float r = 2;
+	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
+	float r = 1;
 
   public:
 	void Initialize(Model* model,Vector3 trans);
-	void Update();
+	void Update(Model* model);
 	void Draw(ViewProjection viewProjection);
 	void SetPlayer(Player* player);
 
@@ -69,7 +69,7 @@ class Enemy {
 	/// <summary>
 	/// 弾発射
 	/// </summary>
-	void Fire();
+	void Fire(Model* model);
 
 	/// <summary>
 	/// 接近フェーズ初期化

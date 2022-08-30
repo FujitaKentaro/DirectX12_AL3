@@ -13,7 +13,7 @@ void RailCamera::Initialize(Vector3 wTrans, Vector3 rad) {
 	worldTransform_.rotation_ = rad;
 	
 
-	//viewProjection_.farZ = 1000;
+	viewProjection_.farZ = 1000;
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
@@ -43,6 +43,7 @@ void RailCamera::Update(Player* player) {
 	Vector3 up(0, 1, 0);
 	// レールカメラの回転を反映（レールカメラの上方ベクトル）
 	viewProjection_.up = Affin::VecMat(up, worldTransform_.matWorld_);
+	viewProjection_.fovAngleY = FieldOfViewY(60, 35);
 	// ビュープロジェクションの更新
 	viewProjection_.UpdateMatrix();
 	
@@ -99,4 +100,9 @@ Vector3 RailCamera::GetWorldPosition() {
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+float RailCamera::FieldOfViewY(float focalLengs, float sensor) {
+
+	return 2 * atan(sensor / (2 * focalLengs));
 }

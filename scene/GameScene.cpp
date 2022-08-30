@@ -38,15 +38,17 @@ void GameScene::Initialize(GameScene* gameScene) {
 	model_ = Model::Create();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	modelBullet_ = Model::CreateFromOBJ("bullet", true);
+	modelPlayer_ = Model::CreateFromOBJ("body", true);
+	modelEnemy_ = Model::CreateFromOBJ("ene", true);
 	//自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	player_->Initialize(modelPlayer_, textureHandle_);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	railCamera_->Initialize(Vector3{0.0f, 0.0f, -120.0f}, Vector3{0.0f, 0.0f, 0.0f});
+	railCamera_->Initialize(Vector3{0.0f, 0.0f, -80.0f}, Vector3{0.0f, 0.0f, 0.0f});
 
-	player_->SetParent(railCamera_->GetWorldTransform());	
+	player_->SetParent(railCamera_->GetWorldTransform());
 
 	skydome_->Initialize(modelSkydome_);
 
@@ -82,14 +84,14 @@ void GameScene::Update() {
 	//デスフラグの立った弾を削除
 	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	//自キャラの更新
-	player_->Update(viewProjection_,modelBullet_);
+	player_->Update(viewProjection_, modelBullet_);
 
 	UpdateEnemyPopCommands();
 
 	//弾更新
 	for (std::unique_ptr<Enemy>& enemy : enemy_) {
 		//敵キャラの更新
-		enemy->Update();
+		enemy->Update(modelBullet_);
 	}
 	//弾更新
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
@@ -169,6 +171,8 @@ void GameScene::CheckAllCollisions() {
 
 	//自弾リストの取得
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
+	////敵弾リストの取得
+	//const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets_ = GetBullets();
 
 #pragma region 自キャラと敵弾の当たり判定
 	{
@@ -219,15 +223,15 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 #pragma region 自弾と敵弾の当たり判定
 	{
-		// 敵弾
+		// 自球と敵弾すべての当たり判定
 		for (const std::unique_ptr<PlayerBullet>& pBullet : playerBullets) {
 
 			posA = pBullet->GetWorldPosition();
-			// 自球と敵弾すべての当たり判定
+
+			// 敵弾
 			for (const std::unique_ptr<EnemyBullet>& eBullet : enemyBullets_) {
 				//敵弾の座標
 				posB = eBullet->GetWorldPosition();
-
 				float a = std::pow(posB.x - posA.x, 2.0f) + std::pow(posB.y - posA.y, 2.0f) +
 				          std::pow(posB.z - posA.z, 2.0f);
 				float lenR = std::pow((eBullet.get()->r + pBullet.get()->r), 2.0);
@@ -253,7 +257,7 @@ void GameScene::Fire(Vector3 trans) {
 	assert(player_);
 
 	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
-	enemy->Initialize(model_, trans);
+	enemy->Initialize(modelEnemy_, trans);
 	enemy->SetPlayer(player_);
 	enemy->SetGameScene(gameScene_);
 	enemy_.push_back(std::move(enemy));

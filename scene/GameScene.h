@@ -63,6 +63,8 @@ class GameScene {
 	/// </summary>
 	void AddEnemyBullet(std::unique_ptr<EnemyBullet> enemyBullet);
 
+	
+
 	/// <summary>
 	/// 敵発生データの読み込み
 	/// </summary>
@@ -89,6 +91,8 @@ class GameScene {
 
 	// 3Dモデル
 	Model* model_ = nullptr;
+	Model* modelEnemy_ = nullptr;
+	Model* modelPlayer_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	Model* modelBullet_ = nullptr;
 
@@ -132,6 +136,7 @@ class GameScene {
 	// ステージ
 	int stage = 0;
 
+	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

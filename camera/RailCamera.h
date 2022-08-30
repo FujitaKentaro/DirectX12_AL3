@@ -21,6 +21,9 @@ class RailCamera {
 	Input* input_ = nullptr;
 
   public:
+	// fov(画角変更)関数
+	float FieldOfViewY(float focalLengs, float sensor);
+
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -53,4 +56,6 @@ class RailCamera {
 
 	/// <returns>ビュープロジェクション</returns>
 	const ViewProjection& GetViewProjection() { return viewProjection_; }
+
+
 };

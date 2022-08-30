@@ -5,7 +5,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);
 
 	model_ = model;
-	textureHandle_ = TextureManager::Load("mario.png");
+	//textureHandle_ = TextureManager::Load("mario.png");
 
 	// 3Dレティクルのワールドトランスフォームの初期化
 	worldTransform3DReticle_.Initialize();
@@ -26,6 +26,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	worldTransform_.matWorld_ = MathUtility::Matrix4Translation(
 	  worldTransform_.translation_.x, worldTransform_.translation_.y,
 	  worldTransform_.translation_.z);
+
+	hp = 10;
 }
 
 /// <summary>
@@ -150,7 +152,7 @@ void Player::Update(ViewProjection viewProjection, Model* model) {
 /// </summary>
 void Player::Draw(ViewProjection viewProjection) {
 
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection);
 
 	// model_->Draw(worldTransform3DReticle_, viewProjection, textureHandle_);
 	//弾描画
@@ -160,14 +162,14 @@ void Player::Draw(ViewProjection viewProjection) {
 }
 
 void Player::MatUpdate(WorldTransform& worldTransform) {
-	
+
 	// パーツの更新
 
 	// ３移動合成行列を計算
 	worldTransform_.matWorld_ = Affin::matWorld(
 	  worldTransform_.translation_, worldTransform_.rotation_, worldTransform_.scale_);
 
-	// 親の行列を掛け算代入	
+	// 親の行列を掛け算代入
 
 	worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
 
@@ -189,27 +191,6 @@ void Player::Move() {
 		move.x += (float)joyState.Gamepad.sThumbLX / SHRT_MAX * 0.1;
 		move.y += (float)joyState.Gamepad.sThumbLY / SHRT_MAX * 0.1;
 	}
-
-	//// 平行移動
-	//{ // X方向
-	//	if (input_->PushKey(DIK_D)) {
-	//		move.x = 0.1f;
-	//	} else if (input_->PushKey(DIK_A)) {
-	//		move.x = -0.1f;
-	//	}
-	//	// Y方向
-	//	if (input_->PushKey(DIK_W)) {
-	//		move.y = 0.1f;
-	//	} else if (input_->PushKey(DIK_S)) {
-	//		move.y = -0.1f;
-	//	}
-	//	// Z方向
-	//	if (input_->PushKey(DIK_3)) {
-	//		move.z = 0.1f;
-	//	} else if (input_->PushKey(DIK_4)) {
-	//		move.z = -0.1f;
-	//	}
-	//}
 
 	//移動限界座標
 	const float kMoveLimitX = 35;
@@ -318,7 +299,14 @@ Vector3 Player::GetWorldPosition() {
 /// <summary>
 /// 衝突を検知したら呼び出されるコールバック関数
 /// </summary>
-void Player::OnCollision() {}
+void Player::OnCollision() {
+	hp -= 1;
+	if (hp <= 0) {
+		isDead = true;
+	}
+}
+// point 加算
+void Player::AddPoint() { point += 1; }
 
 /// <summary>
 /// UI描画
@@ -346,6 +334,7 @@ void Player::WorldReticle() {
 	worldTransform3DReticle_.matWorld_ = Affin::matTrans(worldTransform_.translation_);
 	worldTransform3DReticle_.TransferMatrix();
 }
+
 // 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
 void Player::Reticle(ViewProjection viewprojection) {
 	WorldReticle();

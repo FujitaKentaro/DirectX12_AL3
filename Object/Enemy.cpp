@@ -1,16 +1,18 @@
 #include "Enemy.h"
 #include "Player.h"
+#include "GameScene.h"
 
 /// <summary>
 /// 初期化
 /// </summary>
-void Enemy::Initialize(Model* model,Vector3 trans) {
+void Enemy::Initialize(Model* model, Vector3 trans) {
 	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("zako.png");
+
+	textureHandle_ = TextureManager::Load("ddddog.png");
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -19,7 +21,7 @@ void Enemy::Initialize(Model* model,Vector3 trans) {
 	worldTransform_.Initialize();
 
 	worldTransform_.translation_ = trans;
-	
+	//worldTransform_.scale_ = {2,2,2};
 
 	//弾更新
 	//	Fire();
@@ -31,10 +33,11 @@ void Enemy::Initialize(Model* model,Vector3 trans) {
 /// <summary>
 /// 更新
 /// </summary>
-void Enemy::Update() {
+void Enemy::Update(Model* model) {
+	assert(model);
 
 	// デスフラグの立った弾を削除
-	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
+	//bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
 
 	//行列更新
 	MatUpdate(worldTransform_);
@@ -53,7 +56,7 @@ void Enemy::Update() {
 
 		if (fireTimer_ <= 0) {
 			// 弾を発射
-			Fire();
+			Fire(model);
 			// 発射タイマーを初期化
 			fireTimer_ = kFireInterval;
 		}
@@ -66,9 +69,9 @@ void Enemy::Update() {
 		break;
 	}
 	//弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+	/*for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 		bullet->Update();
-	}
+	}*/
 
 	debugText_->SetPos(10, 50);
 	debugText_->Printf(
@@ -88,9 +91,9 @@ void Enemy::Draw(ViewProjection viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
 	//弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+	/*for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection);
-	}
+	}*/
 }
 
 /// <summary>
@@ -121,16 +124,17 @@ void Enemy::MatUpdate(WorldTransform& worldTransform_) {
 /// <summary>
 /// 弾発射
 /// </summary>
-void Enemy::Fire() {
+void Enemy::Fire(Model* model) {
 
 	assert(player_);
+	assert(model);
 
 	//弾の速度
-	const float kBulletSpeed = 0.5f;	
+	const float kBulletSpeed = 0.5f;
 
 	Vector3 playerPos = player_->GetWorldPosition();
 	Vector3 enePos = GetWorldPosition();
-	
+
 	Vector3 a;
 	a.x = playerPos.x - enePos.x;
 	a.y = playerPos.y - enePos.y;
@@ -138,16 +142,17 @@ void Enemy::Fire() {
 	Vector3 nomal = MathUtility::Vector3Normalize(a);
 
 	Vector3 velocity(nomal.x * kBulletSpeed, nomal.y * kBulletSpeed, nomal.z * kBulletSpeed);
-	
+
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = Affin::VecMat(velocity, worldTransform_.matWorld_);
 
 	// 弾を生成し、初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+	newBullet->Initialize(model, worldTransform_.translation_, velocity);
 
 	// 弾を登録する
-	bullets_.push_back(std::move(newBullet));
+	//bullets_.push_back(std::move(newBullet));
+	gameScene_->AddEnemyBullet(std::move(newBullet));
 }
 
 /// <summary>
@@ -176,5 +181,6 @@ Vector3 Enemy::GetWorldPosition() {
 /// 衝突を検知したら呼び出されるコールバック関数
 /// </summary>
 void Enemy::OnCollision() {
-
+	isDead_ = true;
+	player_->AddPoint();
 }

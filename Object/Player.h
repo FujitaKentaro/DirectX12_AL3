@@ -41,8 +41,12 @@ class Player {
 	// 2Dレティクル用スプライト
 	std::unique_ptr<Sprite> sprite2DReticle_;
 
+	int hp = 0;
+	int point = 0;
+	bool isDead = false;
+
   public:
-	float r = 2;
+	float r = 1;
 
   public:
 	/// <summary>
@@ -116,4 +120,7 @@ class Player {
 
 	// 3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
 	void Reticle(ViewProjection viewprojection);
+
+	// point 加算
+	void AddPoint();
 };
