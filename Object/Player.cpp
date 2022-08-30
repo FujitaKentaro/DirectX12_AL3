@@ -27,7 +27,8 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	  worldTransform_.translation_.x, worldTransform_.translation_.y,
 	  worldTransform_.translation_.z);
 
-	hp = 10;
+	hp = 100;
+	point = 0;
 }
 
 /// <summary>
@@ -136,17 +137,19 @@ void Player::Update(ViewProjection viewProjection, Model* model) {
 		  worldTransform3DReticle_.translation_.y, worldTransform3DReticle_.translation_.z);
 	}
 
-	debugText_->SetPos(10, 10);
+	/*debugText_->SetPos(10, 10);
 	debugText_->Printf(
 	  "player : x,%f  y,%f z,%f", worldTransform_.translation_.x, worldTransform_.translation_.y,
 	  worldTransform_.translation_.z);
 	debugText_->SetPos(10, 30);
 	debugText_->Printf(
 	  "player : x,%f  y,%f z,%f", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
-	  worldTransform_.rotation_.z);
+	  worldTransform_.rotation_.z);*/
 
 	debugText_->SetPos(600, 500);
 	debugText_->Printf("crushing : %d", point);
+	debugText_->SetPos(600, 550);
+	debugText_->Printf("   hp    : %d", hp);
 #pragma endregion
 }
 
@@ -346,7 +349,10 @@ void Player::Reticle(ViewProjection viewprojection) {
 
 	//ビューポート行列
 	Matrix4 matViewport = {
-	  640, 0, 0, 0, 0, -360, 0, 0, 0, 0, 1, 0, 640, 360, 0, 1,
+	  640, 0, 0, 0, 
+	  0, -360, 0, 0,
+	  0, 0, 1, 0,
+	  640, 360, 0, 1,
 	};
 
 	//ビューポート行列

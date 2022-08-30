@@ -17,6 +17,13 @@
 #include "Skydome.h"
 #include <sstream>
 
+enum stage {
+	TITLE,
+	INFO,
+	GAME,
+	END
+};
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -138,6 +145,7 @@ class GameScene {
 
 	// ステージ
 	int stage = 0;
+	int time=0;
 
 	
 	/// <summary>

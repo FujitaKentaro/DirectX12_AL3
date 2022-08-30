@@ -30,6 +30,7 @@ void Enemy::Initialize(Model* model, Vector3 trans) {
 	ApproachInitialize();
 }
 
+
 /// <summary>
 /// 更新
 /// </summary>
@@ -48,7 +49,7 @@ void Enemy::Update(Model* model) {
 	case Phase::Approach:
 	default:
 		worldTransform_.translation_.z += -0.05f;
-		if (worldTransform_.translation_.z < 0.0f) {
+		if (worldTransform_.translation_.z < -30.0f) {
 			phase_ = Phase::Leave;
 		}
 
@@ -184,4 +185,32 @@ Vector3 Enemy::GetWorldPosition() {
 void Enemy::OnCollision() {
 	isDead_ = true;
 	player_->AddPoint();
+}
+
+/// <summary>
+/// 初期化
+/// </summary>
+void Enemy::Initialize(Model* model) {
+	// NULLポインタチェック
+	assert(model);
+
+	model_ = model;
+	// テクスチャ読み込み
+
+	textureHandle_ = TextureManager::Load("ddddog.png");
+
+	// シングルトンインスタンスを取得する
+	input_ = Input::GetInstance();
+	debugText_ = DebugText::GetInstance();
+
+	worldTransform_.Initialize();
+
+	worldTransform_.translation_ = {0, 0, 200};
+	// worldTransform_.scale_ = {2,2,2};
+
+	//弾更新
+	//	Fire();
+
+	//接近フェーズ初期化
+	ApproachInitialize();
 }

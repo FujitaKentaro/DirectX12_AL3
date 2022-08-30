@@ -79,30 +79,103 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	}
 
-	//デスフラグの立った弾を削除
-	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
-	//デスフラグの立った弾を削除
-	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
-	//自キャラの更新
-	player_->Update(viewProjection_, modelBullet_);
+	switch (stage) {
+	case TITLE:
+		XINPUT_STATE joyState;
 
-	UpdateEnemyPopCommands();
+		if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
 
-	//弾更新
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		//敵キャラの更新
-		enemy->Update(modelBullet_);
+			return;
+		}
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+			stage = GAME;
+		}
+
+		break;
+
+		
+
+		
+
+	case END:
+
+		gameScene_->Initialize(gameScene_);
+		//XINPUT_STATE joyState;
+		time = 0;
+
+		// 自キャラと敵弾すべての当たり判定
+		for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+			bullet->IsDeath();
+		}
+		for (const std::unique_ptr<Enemy>& enemy : enemy_) {
+			enemy->IsDeath();
+		}
+		
+
+		if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
+
+			return;
+		}
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+			stage = TITLE;
+		}
+
+		break;
+	case INFO:
+
+		if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
+
+			return;
+		}
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+			stage = GAME;
+		}
+		//自キャラの更新
+		player_->Update(viewProjection_, modelBullet_);
+		railCamera_->Update(player_);
+
+		break;
+	case GAME:
+		time++;
+		if (player_->IsDead()==true) {
+			stage = END;
+		}
+		//デスフラグの立った弾を削除
+		enemyBullets_.remove_if(
+		  [](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
+		//デスフラグの立った弾を削除
+		enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
+		//自キャラの更新
+		player_->Update(viewProjection_, modelBullet_);
+
+		UpdateEnemyPopCommands();
+
+		//弾更新
+		for (std::unique_ptr<Enemy>& enemy : enemy_) {
+			//敵キャラの更新
+			enemy->Update(modelBullet_);
+		}
+		//弾更新
+		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+			bullet->Update();
+		}
+
+		//衝突判定
+		CheckAllCollisions();
+
+		railCamera_->Update(player_);
+
+		if (player_->GetPoint() < 2) {
+			LoadEnemyPopData();
+		}
+
+		if (player_->GetPoint() >= 15) {
+			stage = END;
+		}
+		
+
+		break;
 	}
-	//弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
-		bullet->Update();
-	}
-
-	//衝突判定
-	CheckAllCollisions();
-
-	railCamera_->Update(player_);
-
 	
 }
 
@@ -132,18 +205,50 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	/// 
+	switch (stage) {
+	case TITLE:
+		
+		debugText_->SetPos(1280/2, 720/2);
+		debugText_->Printf(" PRESS LB BUTTON ");
+
+		break;
+
+		case INFO:
+
+		debugText_->SetPos(1280 / 2, 500);
+		debugText_->Printf(" SHOT RB  ");
+
+		//自キャラの描画
+		player_->Draw(railCamera_->GetViewProjection());
+
+		break;
+
+	case END:
+
+		debugText_->SetPos(1280 / 2, 720 / 2);
+		debugText_->Printf(" PRESS LB BUTTON ");
+
+		break;
+	case GAME:
+
+		
+		//自キャラの描画
+		player_->Draw(railCamera_->GetViewProjection());
+		//弾描画
+		for (std::unique_ptr<Enemy>& enemy : enemy_) {
+			enemy->Draw(railCamera_->GetViewProjection());
+		}
+		//弾描画
+		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+			bullet->Draw(railCamera_->GetViewProjection());
+		}
+		debugText_->SetPos(1280 / 2, 600);
+		debugText_->Printf(" SHOT RB  ");
+		break;
+	}
 	// 3Dモデル描画
 	skydome_->Draw(railCamera_->GetViewProjection());
-	//自キャラの描画
-	player_->Draw(railCamera_->GetViewProjection());
-	//弾描画
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		enemy->Draw(railCamera_->GetViewProjection());
-	}
-	//弾描画
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
-		bullet->Draw(railCamera_->GetViewProjection());
-	}
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
@@ -155,8 +260,22 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+	
+	switch (stage) {
+	case TITLE:
 
-	player_->DrawUI();
+		break;
+
+	case END:
+
+		break;
+	case INFO:
+	case GAME:
+
+		player_->DrawUI();
+		break;
+	}
+	
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
@@ -174,7 +293,7 @@ void GameScene::CheckAllCollisions() {
 	//自弾リストの取得
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
 	////敵弾リストの取得
-	//const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets_ = GetBullets();
+	// const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets_ = GetBullets();
 
 #pragma region 自キャラと敵弾の当たり判定
 	{
@@ -334,32 +453,12 @@ void GameScene::UpdateEnemyPopCommands() {
 			enemyPopTime = waitTime;
 			//コマンドループを抜ける
 			break;
+		} else if (word.find("END") == 0) {
+			
+			break;
 		}
 	}
 }
 
 // リセット
-void GameScene::Reset() {
-
-	//自キャラの初期化
-	player_->Initialize(modelPlayer_, textureHandle_);
-
-	//ビュープロジェクションの初期化
-	viewProjection_.Initialize();
-
-	railCamera_->Initialize(Vector3{0.0f, 0.0f, -80.0f}, Vector3{0.0f, 0.0f, 0.0f});
-
-	player_->SetParent(railCamera_->GetWorldTransform());
-
-	skydome_->Initialize(modelSkydome_);
-
-	Vector3 trans(0, 0, -100);
-
-	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
-	enemy->Initialize(modelEnemy_, trans);
-	enemy->SetPlayer(player_);
-	enemy->SetGameScene(gameScene_);
-
-	LoadEnemyPopData();
-
-}
+void GameScene::Reset() {}

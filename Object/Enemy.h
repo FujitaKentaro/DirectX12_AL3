@@ -50,12 +50,13 @@ class Enemy {
 
   public:
 	// ”­ŽËŠÔŠu
-	static const int kFireInterval = 60;
+	static const int kFireInterval = 120;
 	// ’eƒŠƒXƒg‚ðŽæ“¾
 	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 	float r = 1;
 
   public:
+	void Initialize(Model* model);
 	void Initialize(Model* model,Vector3 trans);
 	void Update(Model* model);
 	void Draw(ViewProjection viewProjection);
@@ -89,4 +90,5 @@ class Enemy {
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 	bool IsDead() const { return isDead_; }
+	void IsDeath() { isDead_ = true; }
 };
