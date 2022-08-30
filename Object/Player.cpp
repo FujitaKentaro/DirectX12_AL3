@@ -5,7 +5,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	assert(model);
 
 	model_ = model;
-	//textureHandle_ = TextureManager::Load("mario.png");
+	textureHandle_ = TextureManager::Load("block1.png");
 
 	// 3Dレティクルのワールドトランスフォームの初期化
 	worldTransform3DReticle_.Initialize();
@@ -144,6 +144,9 @@ void Player::Update(ViewProjection viewProjection, Model* model) {
 	debugText_->Printf(
 	  "player : x,%f  y,%f z,%f", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
 	  worldTransform_.rotation_.z);
+
+	debugText_->SetPos(600, 500);
+	debugText_->Printf("crushing : %d", point);
 #pragma endregion
 }
 
@@ -152,7 +155,7 @@ void Player::Update(ViewProjection viewProjection, Model* model) {
 /// </summary>
 void Player::Draw(ViewProjection viewProjection) {
 
-	model_->Draw(worldTransform_, viewProjection);
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
 	// model_->Draw(worldTransform3DReticle_, viewProjection, textureHandle_);
 	//弾描画

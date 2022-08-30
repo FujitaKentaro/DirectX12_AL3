@@ -12,7 +12,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 
 	model_ = model;
 	// テクスチャ読み込み
-	//textureHandle_ = TextureManager::Load("ddddog.png");
+	textureHandle_ = TextureManager::Load("jiki2.png");
 
 	// ワールドトランスフォーム
 	worldTransform_.Initialize();
@@ -48,7 +48,7 @@ void PlayerBullet::Update() {
 /// 描画
 /// </summary>
 void PlayerBullet::Draw(const ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection);
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
 
 /// <summary>

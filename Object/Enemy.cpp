@@ -66,6 +66,10 @@ void Enemy::Update(Model* model) {
 
 		worldTransform_.translation_.x += -0.1f;
 		worldTransform_.translation_.y += 0.1f;
+		if (worldTransform_.translation_.x <= -50) {
+			isDead_ = true;
+		}
+
 		break;
 	}
 	//’eXV
@@ -73,14 +77,11 @@ void Enemy::Update(Model* model) {
 		bullet->Update();
 	}*/
 
-	debugText_->SetPos(10, 50);
+	/*debugText_->SetPos(10, 50);
 	debugText_->Printf(
 	  "enemy : x,%f  y,%f z,%f", worldTransform_.translation_.x, worldTransform_.translation_.y,
-	  worldTransform_.translation_.z);
-	debugText_->SetPos(10, 70);
-	debugText_->Printf(
-	  "enemy : x,%f  y,%f z,%f", worldTransform_.rotation_.x, worldTransform_.rotation_.y,
-	  worldTransform_.rotation_.z);
+	  worldTransform_.translation_.z);*/
+
 }
 
 /// <summary>

@@ -6,6 +6,7 @@
 #include "AxisIndicator.h"
 #include "PrimitiveDrawer.h"
 
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win = nullptr;
@@ -72,6 +73,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		input->Update();
 		// ゲームシーンの毎フレーム処理
 		gameScene->Update();
+		if (input->TriggerKey(DIK_R)) {
+			gameScene->Reset();
+		}
 		// 軸表示の更新
 		axisIndicator->Update();
 

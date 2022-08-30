@@ -102,6 +102,8 @@ void GameScene::Update() {
 	CheckAllCollisions();
 
 	railCamera_->Update(player_);
+
+	
 }
 
 void GameScene::Draw() {
@@ -334,4 +336,30 @@ void GameScene::UpdateEnemyPopCommands() {
 			break;
 		}
 	}
+}
+
+// リセット
+void GameScene::Reset() {
+
+	//自キャラの初期化
+	player_->Initialize(modelPlayer_, textureHandle_);
+
+	//ビュープロジェクションの初期化
+	viewProjection_.Initialize();
+
+	railCamera_->Initialize(Vector3{0.0f, 0.0f, -80.0f}, Vector3{0.0f, 0.0f, 0.0f});
+
+	player_->SetParent(railCamera_->GetWorldTransform());
+
+	skydome_->Initialize(modelSkydome_);
+
+	Vector3 trans(0, 0, -100);
+
+	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
+	enemy->Initialize(modelEnemy_, trans);
+	enemy->SetPlayer(player_);
+	enemy->SetGameScene(gameScene_);
+
+	LoadEnemyPopData();
+
 }
