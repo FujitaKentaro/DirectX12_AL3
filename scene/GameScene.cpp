@@ -26,8 +26,11 @@ void GameScene::Initialize(GameScene* gameScene) {
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
+	soundDataHandle_ = audio_->LoadWave("sound/Irregular.wav");
+
 	// 軸方向表示の表示を有効にする
-	AxisIndicator::GetInstance()->SetVisible(true);
+	//AxisIndicator::GetInstance()->SetVisible(true);
+	AxisIndicator::GetInstance()->SetVisible(false);
 	// 軸方向表示が参照するビュープロジェクションを指定する（アドレス渡し）
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
@@ -53,6 +56,8 @@ void GameScene::Initialize(GameScene* gameScene) {
 	skydome_->Initialize(modelSkydome_);
 
 	LoadEnemyPopData();
+
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
 }
 
 void GameScene::Update() {
@@ -79,9 +84,12 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	}
 
+	
+
 	switch (stage) {
-	case TITLE:
 		XINPUT_STATE joyState;
+	case TITLE:
+		
 
 		if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
 
@@ -91,11 +99,7 @@ void GameScene::Update() {
 			stage = GAME;
 		}
 
-		break;
-
-		
-
-		
+		break;	
 
 	case END:
 
@@ -116,7 +120,7 @@ void GameScene::Update() {
 
 			return;
 		}
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
 			stage = TITLE;
 		}
 
@@ -127,7 +131,7 @@ void GameScene::Update() {
 
 			return;
 		}
-		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
 			stage = GAME;
 		}
 		//自キャラの更新
@@ -208,6 +212,8 @@ void GameScene::Draw() {
 	/// 
 	switch (stage) {
 	case TITLE:
+		debugText_->SetPos(1280 / 2, 300);
+		debugText_->Printf(" OBJECTSHOOTER ");
 		
 		debugText_->SetPos(1280/2, 720/2);
 		debugText_->Printf(" PRESS LB BUTTON ");
@@ -225,9 +231,11 @@ void GameScene::Draw() {
 		break;
 
 	case END:
+		    debugText_->SetPos(1280 / 2, 300);
+		    debugText_->Printf(" E N D ");
 
 		debugText_->SetPos(1280 / 2, 720 / 2);
-		debugText_->Printf(" PRESS LB BUTTON ");
+		debugText_->Printf(" PRESS B BUTTON ");
 
 		break;
 	case GAME:

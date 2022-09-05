@@ -1,9 +1,9 @@
 #pragma once
+#include "Affin.h"
+#include "DebugText.h"
+#include "Input.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "DebugText.h"
-#include "Affin.h"
-#include "Input.h"
 
 class Player;
 
@@ -12,13 +12,15 @@ class Player;
 /// </summary>
 class RailCamera {
   private:
-	  //ワールド変換データ
+	//ワールド変換データ
 	WorldTransform worldTransform_;
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
-	DebugText* debugText_= nullptr;
+	DebugText* debugText_ = nullptr;
 	Input* input_ = nullptr;
+
+	float focalLengs = 60;
 
   public:
 	// fov(画角変更)関数
@@ -27,7 +29,7 @@ class RailCamera {
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Initialize(Vector3 wTrans , Vector3 rad);
+	void Initialize(Vector3 wTrans, Vector3 rad);
 
 	/// <summary>
 	/// 更新
@@ -56,6 +58,4 @@ class RailCamera {
 
 	/// <returns>ビュープロジェクション</returns>
 	const ViewProjection& GetViewProjection() { return viewProjection_; }
-
-
 };

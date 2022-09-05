@@ -124,7 +124,7 @@ void Player::Update(ViewProjection viewProjection, Model* model) {
 		worldTransform3DReticle_.matWorld_ = Affin::matTrans(worldTransform3DReticle_.translation_);
 		worldTransform3DReticle_.TransferMatrix();
 
-		DebugText::GetInstance()->SetPos(20, 200);
+		/*DebugText::GetInstance()->SetPos(20, 200);
 		DebugText::GetInstance()->Printf(
 		  "Mouse ScreenPos:(%d,%d)", spritePosition.x, spritePosition.y);
 		DebugText::GetInstance()->SetPos(20, 220);
@@ -135,6 +135,7 @@ void Player::Update(ViewProjection viewProjection, Model* model) {
 		DebugText::GetInstance()->Printf(
 		  "MouseObject:(%f,%f,%f)", worldTransform3DReticle_.translation_.x,
 		  worldTransform3DReticle_.translation_.y, worldTransform3DReticle_.translation_.z);
+	*/
 	}
 
 	/*debugText_->SetPos(10, 10);

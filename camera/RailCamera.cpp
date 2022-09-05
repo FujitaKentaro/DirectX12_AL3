@@ -11,7 +11,6 @@ void RailCamera::Initialize(Vector3 wTrans, Vector3 rad) {
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = wTrans;
 	worldTransform_.rotation_ = rad;
-	
 
 	viewProjection_.farZ = 1000;
 	//ビュープロジェクションの初期化
@@ -31,7 +30,7 @@ void RailCamera::Update(Player* player) {
 	Rotate();
 	worldTransform_.matWorld_ = Affin::matWorld(
 	  worldTransform_.translation_, worldTransform_.rotation_, worldTransform_.scale_);
-	
+
 	viewProjection_.eye = worldTransform_.translation_;
 	// ワールド前方ベクトル
 	Vector3 forward(0, 0, 1);
@@ -43,10 +42,24 @@ void RailCamera::Update(Player* player) {
 	Vector3 up(0, 1, 0);
 	// レールカメラの回転を反映（レールカメラの上方ベクトル）
 	viewProjection_.up = Affin::VecMat(up, worldTransform_.matWorld_);
-	viewProjection_.fovAngleY = FieldOfViewY(60, 35);
+
+	XINPUT_STATE joyState;
+
+	/*if (!Input::GetInstance()->GetJoystickState(0, joyState)) {
+
+	    return;
+	}
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) {
+	    focalLengs--;
+
+	}
+	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) {
+	    focalLengs++;
+	}*/
+
+	viewProjection_.fovAngleY = FieldOfViewY(focalLengs, 35);
 	// ビュープロジェクションの更新
 	viewProjection_.UpdateMatrix();
-	
 }
 
 /// <summary>
