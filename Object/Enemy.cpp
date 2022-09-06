@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Player.h"
+#include "GameScene.h"
 
 /// <summary>
 /// ‰Šú‰»
@@ -29,7 +30,7 @@ void Enemy::Initialize(Model* model,Vector3 trans) {
 }
 
 /// <summary>
-/// XV
+/// XVa
 /// </summary>
 void Enemy::Update() {
 
@@ -147,7 +148,7 @@ void Enemy::Fire() {
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 	// ’e‚ğ“o˜^‚·‚é
-	bullets_.push_back(std::move(newBullet));
+	gameScene_->AddEnemyBullet(std::move(newBullet));
 }
 
 /// <summary>
